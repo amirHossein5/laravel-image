@@ -54,9 +54,9 @@ php artisan vendor:publish --tag image
 
 ## "make" method
 
-When you are using "make" method like first example above, defaults for directories, and sizes('use_size' key array in config file) are setted.
-Except "->setExclusiveDirectory('post')" which you have to pass, and this will save image in path of first Example above.
-And creates images automatically with sizes(because "make" method sets default for directories and sizes), which defined in config file.
+When you are using "make" method like first example above, defaults for directories, and sizes('use_size' passed array in config file) are setted.
+ Except "->setExclusiveDirectory('post')" which you have to pass, and this will save image in path of first Example above. 
+And creates images automatically with sizes(because "make" method sets defaults for directories and sizes), which defined in config file.
 
 But how to customize directories, and sizes.
 
@@ -76,7 +76,7 @@ All image Path setters:
 |---------------------------------|------------------------------------------------------|
 | setRootDirectory( string )      | images (written in config file)                      |
 | setExclusiveDirectory( string ) |                                                      |
-| setArchiveDirectories( string ) | year/month/date                                      |
+| setArchiveDirectories( string ) | year/month/day                                       |
 | setSizesDirectory( string )     | time()                                               |
 | setImageName( string )          | time()_rand(100, 999)_sizeName(if there be any size) |
 | setImageFormat( string )        | uploaded image format                                |
@@ -109,7 +109,7 @@ Image::raw($image)
   ->save()
 ```
 
-nothing will be automatically set(directories, and sizes).For setting directory there is two method:
+Nothing will be automatically set(directories, and sizes). For setting directory of image there is two method:
 
 ```php
 Image::raw($image)
@@ -129,21 +129,23 @@ For size customazations see [Size customazations](#size-customazations).
 
 ## Size customazations
 
-All size setters:
+You can modify or add your own array of sizes in config file and write key of that in 'use_size' of configuration. Then whenever you use "make" method (or add with ```->resizeBy()```) it will automatically create images with specified sizes.
 
-| setter                                                   | description                                                                         |
-|----------------------------------------------------------|-------------------------------------------------------------------------------------|
-| autoResize()                                             | removes previous defined sizes                                                      |
-| resize( $width, $height, $as = null )                    | removes previous defined sizes, and adds a size                                     |
-| alsoResize( $width, $height, $as = null )                | adds a size                                                                         |
-| resizeBy( array )                                        | resize by intended array(the structure shuold be like 'imageSizes' in configuration)|
+Or if you want to customize that manually:
+
+| setter                                    | description                                                                         |
+|-------------------------------------------|-------------------------------------------------------------------------------------|
+| autoResize()                              | removes previous defined sizes                                                      |
+| resize( $width, $height, $as = null )     | removes previous defined sizes, and adds a size                                     |
+| alsoResize( $width, $height, $as = null ) | adds a size                                                                         |
+| resizeBy( array )                         | resize by intended array(the structure shuold be like 'imageSizes' in configuration)|
 
 You may add resizeBy's array from configuration like ```->resizeBy(config('image.postSizes'))```.
 
 
 ### Default size
 
-You can specify default size of the defined sizes too.From configuration,or:
+You can specify default size of the defined sizes too. From configuration, or:
 
 ```php
 Image::
@@ -161,14 +163,14 @@ When you want to update default_size:
 Image::setDefaultSizeFor($post->image, 'small');
 ```
 
-Will return previous array but changed default_size.
+Will return previous array but default_size has changed.
 
 
 ## result-array
 
-After creating image returns array like this:
+After creating image returns array, which
 
-```index``` key contains array,or string(one, or more) image paths, which depends on number of sizes(if there be more than one size it's array).
+```index``` key is array,or string(contains one, or more) image paths, which depends on number of sizes(if there be more than one size it's array).
 
 For example:
 
@@ -185,7 +187,7 @@ For example:
    
    'imageDirectory' => 'image directory'
    
-   'default_size' => 'medium' (if you are "default_size", and if you have more than one sizes)
+   'default_size' => 'medium' (if you are using "default_size", and if you have more than one size)
 ]
 ```
 
