@@ -25,8 +25,8 @@ return [
     'root_directory' => 'images',
 
     /**
-     * that you should pass key of your sizes array, that you defined in below section, like default one.
-     * It's changeable in code too. See documentation, resize image section.
+     * Key of your sizes array, that you defined in below section, like default one.
+     * By default the image sizes in "make" method will be create by this returned array.
      */
 
     'use_size' => 'imageSizes',
