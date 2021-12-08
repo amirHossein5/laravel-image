@@ -31,7 +31,7 @@ But all if these are changeable.
 
 - **[Upsize or not](#upsize-or-not)**
 
-- **[Remove image(s)](#remove-image(s))**
+- **[Remove image(s)](#remove-images)**
   
 - **[Examples](#examples)**
 
@@ -228,10 +228,10 @@ Post::create($request);
 
 ```php
 if(!Image::rm($post->image)){
-  return back()->with('fail message);
+  return back()->with('fail message');
 }
 
-$post->delete
+$post->delete;
 ```
 
 ```php
