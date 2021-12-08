@@ -58,7 +58,7 @@ When you are using "make" method like first example above, defaults for director
 Except "->setExclusiveDirectory('post')" which you have to pass, and this will save image in path of first Example above.
 And creates images automatically with sizes(because "make" method sets default for directories and sizes), which defined in config file.
 
-But how to customize directories.
+But how to customize directories, and sizes.
 
 ### Directory customazations
 
