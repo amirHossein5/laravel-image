@@ -109,7 +109,7 @@ Image::raw($image)
   ->save()
 ```
 
-nothing will be automatically set(directiries, and sizes).For setting directory there is two method:
+nothing will be automatically set(directories, and sizes).For setting directory there is two method:
 
 ```php
 Image::raw($image)
