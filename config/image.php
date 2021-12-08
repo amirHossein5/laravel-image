@@ -38,12 +38,16 @@ return [
 
     'imageSizes' => [
         'large' => [
-            'width' => '1024',
-            'height' => '800'
+            'width' => '800',
+            'height' => '600'
+        ],
+        'medium' => [
+            'width' => '400',
+            'height' => '300'
         ],
         'small' => [
-            'width' => '500',
-            'height' => '400'
+            'width' => '80',
+            'height' => '60'
         ]
     ],
 
