@@ -19,10 +19,10 @@ But all if these are changeable.
 
 - **[Installation](#installation)**
 
-- **["make" method](#"make"-method)**
+- **["make" method](#make-method)**
   - **[Directory customazations](#directory-customazations)**
   
-- **["raw" method](#"raw"-method)**
+- **["raw" method](#raw-method)**
     
 - **[Size customazations](#size-customazations)**
   - **[Default size](#default-size)**
