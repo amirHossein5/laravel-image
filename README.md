@@ -134,8 +134,8 @@ All size setters:
 | setter                                                   | description                                                                         |
 |----------------------------------------------------------|-------------------------------------------------------------------------------------|
 | autoResize()                                             | removes previous defined sizes                                                      |
-| resize( int $width, int $height, string $as = null )     | removes previous defined sizes, and adds a size                                     |
-| alsoResize( int $width, int $height, string $as = null ) | adds a size                                                                         |
+| resize( $width, $height, $as = null )                    | removes previous defined sizes, and adds a size                                     |
+| alsoResize( $width, $height, $as = null )                | adds a size                                                                         |
 | resizeBy( array )                                        | resize by intended array(the structure shuold be like 'imageSizes' in configuration)|
 
 You may add resizeBy's array from configuration like ```->resizeBy(config('image.postSizes'))```.
