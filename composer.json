@@ -1,0 +1,32 @@
+{
+    "name": "amir-hossein5/laravel-image",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AmirHossein5\\LaravelImage\\": "src/",
+            "AmirHossein5\\LaravelImage\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "amirHossein5",
+            "email": "adada5116@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "laravel/framework": "^8.0",
+        "intervention/image": "^2.7",
+        "facade/flare-client-php": "^1.9"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AmirHossein5\\LaravelImage\\ImageServiceProvider"
+            ]
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0"
+    }
+}
