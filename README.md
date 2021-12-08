@@ -33,7 +33,7 @@ But all if these are changeable.
 
 - **[Remove image(s)](#remove-image(s))**
   
-- **[examples](#examples)**
+- **[Examples](#examples)**
 
 ## Prerequisites
 
