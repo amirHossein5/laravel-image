@@ -238,6 +238,13 @@ $post->delete;
 
 ```php
 $image = Image::setDefaultSizeFor($post->image,$request['default_size']);
+
+if (!$request['image']) {
+  return back()
+    ->withInput()
+    ->withErrors(['image' => __('validation.uploaded')]);
+}
+
 $post->image = $image;
 $post->save();
 ```
