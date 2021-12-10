@@ -336,13 +336,7 @@ class ImageTest extends TestCase
     /**
      * Test size setters.
      */
-    public function test_auto_
-        
-        
-        
-        
-        
-        _sizes()
+    public function test_auto_resize_removes_sizes()
     {
         Image::fake();
 
