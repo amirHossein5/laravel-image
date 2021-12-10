@@ -16,8 +16,14 @@ jobs:
       with:
         php-version: '7.4'
     - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Install dependencies
+      uses: nick-invision/retry@v1
+      with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dis
+      
     - name: Create Database
       run: |
         mkdir -p database
