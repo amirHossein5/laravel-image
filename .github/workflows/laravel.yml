@@ -12,24 +12,30 @@ jobs:
     runs-on: windows-2019
 
     steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '7.4'
-    - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, gd, pdo_mysql, fileinfo, ftp, redis, memcached
+          tools: composer:v2
+          coverage: none
 
-    - name: Install dependencies
-      uses: nick-invision/retry@v1
-      with:
+      - name: Install dependencies
+        uses: nick-invision/retry@v1
+        with:
           timeout_minutes: 5
           max_attempts: 5
-          command: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dis
+          command: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
       
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit
+      - name: Create Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: vendor/bin/phpunit
