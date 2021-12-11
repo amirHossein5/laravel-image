@@ -27,20 +27,6 @@ trait Sizeable
         return false;
     }
 
-    public function defaultSize(string $sizeName): self
-    {
-        if ($this->sizes === null) {
-            throw new \ErrorException("You don't have any size to set " . '"defaultSize"');
-        }
-
-        if (array_key_exists($sizeName, $this->sizes)) {
-            $this->defaultSize = $sizeName;
-            return $this;
-        }
-
-        throw new \ErrorException('Undefined size name "' . $sizeName . '"');
-    }
-
     public function resize(int $width, int $height, string $as = null): self
     {
         $array = ['width' => $width, 'height' => $height];
