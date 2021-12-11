@@ -14,6 +14,8 @@ jobs:
     
     strategy:
       fail-fast: true
+      matrix:
+        php: ['7.4', '8.0', '8.1']
 
     steps:
       - name: Checkout code
@@ -22,7 +24,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, gd, pdo_mysql, fileinfo, ftp, redis, memcached
           tools: composer:v2
           coverage: none
@@ -49,7 +51,9 @@ jobs:
     
     strategy:
       fail-fast: true
-
+      matrix:
+        php: ['7.3', '7.4', '8.0', '8.1']
+        
     runs-on: macos-latest
 
     steps:
@@ -59,7 +63,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, gd, pdo_mysql, fileinfo, ftp, redis, memcached
           tools: composer:v2
           coverage: none
@@ -86,6 +90,8 @@ jobs:
     
     strategy:
       fail-fast: true
+      matrix:
+        php: ['7.3', '7.4', '8.0', '8.1']
 
     runs-on: windows-2019
 
@@ -96,7 +102,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, gd, pdo_mysql, fileinfo, ftp, redis, memcached
           tools: composer:v2
           coverage: none
