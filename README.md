@@ -145,17 +145,7 @@ You may add resizeBy's array from configuration like ```->resizeBy(config('image
 
 ### Default size
 
-You can specify default size of the defined sizes too. From configuration, or:
-
-```php
-Image::
-  ...
-  ->defaultSize('key of one of your sizes')
-  ...
-  ->save()
-```
-
-Which affects on output array.
+If you want to use default_size functionality, you can specify default size of the defined sizes in configuration, which affects on output array.
 
 When you want to update default_size:
 
