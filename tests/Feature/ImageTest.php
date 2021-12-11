@@ -314,23 +314,6 @@ class ImageTest extends TestCase
         $this->assertTrue(array_key_exists('index', $image));
         $this->assertTrue(array_key_exists('imageDirectory', $image));
         $this->assertTrue(!array_key_exists('default_size', $image));
-
-        $image = Image::raw($this->image)
-            ->inPath('post')
-            ->resize(10, 10, 'small')
-            ->defaultSize('small')
-            ->save();
-
-        $this->assertTrue(!array_key_exists('default_size', $image));
-
-        $image = Image::raw($this->image)
-            ->inPath('post')
-            ->resize(10, 10, 'small')
-            ->alsoResize(10, 10, 'small')
-            ->defaultSize('small')
-            ->save();
-
-        $this->assertTrue(!array_key_exists('default_size', $image));
     }
 
     /**
@@ -499,25 +482,6 @@ class ImageTest extends TestCase
         }
     }
 
-    public function test_wrong_setted_default_size_throws_exception()
-    {
-        Image::fake();
-
-        $this->expectException(\ErrorException::class);
-
-        Image::make($this->image)
-            ->setExclusiveDirectory('post')
-            ->autoResize()
-            ->resizeBy([
-                'large' => [
-                    'width' => '200',
-                    'height' => 300
-                ]
-            ])
-            ->defaultSize('small')
-            ->save();
-    }
-
     public function test_set_default_size_effects_on_output()
     {
         Image::fake();
@@ -536,91 +500,11 @@ class ImageTest extends TestCase
 
         $this->assertArrayHasKey('default_size', $image);
 
-        $image = Image::make($this->image)
-            ->setExclusiveDirectory('post')
-            ->resizeBy([
-                'large' => [
-                    'width' => '200',
-                    'height' => 300
-                ]
-            ])
-            ->defaultSize('large')
-            ->save();
-
-        $this->assertEquals('large', $image['default_size']);
-
-        $image = Image::raw($this->image)
-            ->inPath('post')
-            ->setImageFormat('png')
-            ->resizeBy([
-                'large' => [
-                    'width' => '200',
-                    'height' => 300
-                ]
-            ])
-            ->defaultSize('large')
-            ->save();
-
-        $this->assertArrayNotHasKey('default_size', $image);
-
-        $image = Image::make($this->image)
-            ->setExclusiveDirectory('post')
-            ->setImageFormat('png')
-            ->resizeBy([
-                'large' => [
-                    'width' => '200',
-                    'height' => 300
-                ],
-                'small' => [
-                    'width' => 50,
-                    'height' => 20
-                ]
-            ])
-            ->defaultSize('large')
-            ->save();
-
-        $this->assertEquals('large', $image['default_size']);
-
-        $image = Image::raw($this->image)
-            ->inPath('post')
-            ->setImageFormat('png')
-            ->resizeBy([
-                'large' => [
-                    'width' => '200',
-                    'height' => 300
-                ],
-                'small' => [
-                    'width' => 50,
-                    'height' => 20
-                ]
-            ])
-            ->defaultSize('large')
-            ->save();
-
-        $this->assertEquals('large', $image['default_size']);
-
-        $image = Image::make($this->image)
-            ->setExclusiveDirectory('post')
-            ->defaultSize('large')
-            ->save();
-
-        $this->assertEquals('large', $image['default_size']);
-
         $image = Image::raw($this->image)
             ->inPath('post')
             ->save();
 
         $this->assertArrayNotHasKey('default_size', $image);
-    }
-
-    public function test_when_there_is_not_any_specified_size_can_not_use_defaultSize()
-    {
-        $this->expectException(\ErrorException::class);
-
-        Image::raw($this->image)
-            ->inPath('post')
-            ->defaultSize('large')
-            ->save();
     }
 
     public function test_changing_default_size_after_created_image()
@@ -629,7 +513,6 @@ class ImageTest extends TestCase
 
         $image = Image::make($this->image)
             ->setExclusiveDirectory('post')
-            ->defaultSize('large')
             ->save();
 
         $image = Image::setDefaultSizeFor($image, 'small');
@@ -639,7 +522,26 @@ class ImageTest extends TestCase
         $image = Image::raw($this->image)
             ->inPath('post')
             ->resizeBy(config('image.imageSizes'))
-            ->defaultSize('large')
+            ->save();
+
+        $image = Image::setDefaultSizeFor($image, 'small');
+
+        $this->assertEquals('small', $image['default_size']);
+        
+        config(['image.default_size' => 'small']);
+        
+        
+        $image = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $image = Image::setDefaultSizeFor($image, 'small');
+
+        $this->assertEquals('small', $image['default_size']);
+
+        $image = Image::raw($this->image)
+            ->inPath('post')
+            ->resizeBy(config('image.imageSizes'))
             ->save();
 
         $image = Image::setDefaultSizeFor($image, 'small');
