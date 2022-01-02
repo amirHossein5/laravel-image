@@ -8,7 +8,7 @@ Create image with multiple sizes based on [intervention](http://image.interventi
     ->save();
 ```
 
-It will save your image in three default size in path:
+It will save your image in three sizes, which were defined in config file, in path:
 
 - ```public/``` 
   - ```images/post/2021/12/2/1638611107/```
