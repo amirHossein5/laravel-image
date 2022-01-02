@@ -10,30 +10,13 @@ Create image with multiple sizes based on [intervention](http://image.interventi
 
 It will save your image in three default size in path:
 
-```public/``` 
-- ```images/post/2021/12/2/1638611107/1638611107_960_large.png```
-- ```images/post/2021/12/2/1638611107/1638611107_960_medium.png```
-- ```images/post/2021/12/2/1638611107/1638611107_960_small.png```
+- ```public/``` 
+  - ```images/post/2021/12/2/1638611107/```
+    - ```1638611107_960_large.png```
+    - ```1638611107_960_medium.png```
+    - ```1638611107_960_small.png```
 
-But all if these are changeable.
 
-- **[Installation](#installation)**
-
-- **["make" method](#make-method)**
-  - **[Directory customazations](#directory-customazations)**
-  
-- **["raw" method](#raw-method)**
-    
-- **[Size customazations](#size-customazations)**
-  - **[Default size](#default-size)**
-  
-- **[result array](#result-array)** 
-
-- **[Upsize or not](#upsize-or-not)**
-
-- **[Remove image(s)](#remove-images)**
-  
-- **[Examples](#examples)**
 
 ## Prerequisites
 
@@ -52,17 +35,62 @@ and for publishing configuration file:
 php artisan vendor:publish --tag image
 ```
 
+And finally you may specify your sizes in configuration:
+
+```
+'use_size' => 'imageSizes',
+
+ 'imageSizes' => [
+    'large' => [
+        'width' => '800',
+        'height' => '600'
+    ],
+    'medium' => [
+        'width' => '400',
+        'height' => '300'
+    ],
+    'small' => [
+        'width' => '80',
+        'height' => '60'
+    ]
+],
+``` 
+
+
+
+
+<!-- - **["make" method](#make-method)**
+  - **[Directory customazations](#directory-customazations)**
+  
+- **["raw" method](#raw-method)**
+    
+- **[Size customazations](#size-customazations)**
+  - **[Default size](#default-size)**
+  
+- **[result array](#result-array)** 
+
+- **[Upsize or not](#upsize-or-not)**
+
+- **[Remove image(s)](#remove-images)**
+  
+- **[Examples](#examples)**
+ -->
+ 
 ## "make" method
 
-When you are using "make" method like first example above, defaults for directories, and sizes('use_size' passed array in config file) are setted.
- Except "->setExclusiveDirectory('post')" which you have to pass, and this will save image in path of first Example above. 
-And creates images automatically with sizes(because "make" method sets defaults for directories and sizes), which defined in config file.
+In ```make``` method defaults for directories and sizes will be set. Beacause of this, when you use:
 
+```php
+  Image::make($request->image)
+    ->setExclusiveDirectory('post')
+    ->save();
+```
+it will create your image in some default path, and with sizes, which you defined in config file (in ```use_size``` part). 
 But how to customize directories, and sizes.
 
 ### Directory customazations
 
-in the parantheses written name of each directory:
+In parantheses written name of each directory:
 
 ```public/``` 
 - ```images(rootDirectory)```
@@ -70,7 +98,7 @@ in the parantheses written name of each directory:
 - ```/2021/12/2/(archiveDirectories)```
 - ```/1638611107(sizesDirectory)``` -> **if there be more than one size**
 
-All image Path setters:
+Image path setters:
 
 | setter                          | default                                              |
 |---------------------------------|------------------------------------------------------|
@@ -116,22 +144,25 @@ Image::raw($image)
   ->inPath('book')
   ->save()
   
-// will be save in public/book/
+// without resizing
+// will be save in public/book/ 
 
 Image::raw($image)
   ->inPublicPath()
   ->save()
   
+// without resizing
 // will be save in public/
 ```
 
-For size customazations see [Size customazations](#size-customazations).
+For add size, and size customazations see [Size customazations](#size-customazations).
 
 ## Size customazations
 
-You can modify or add your own array of sizes in config file and write key of that in 'use_size' of configuration. Then whenever you use "make" method (or add with ```->resizeBy()```) it will automatically create images with specified sizes.
+You can add your own array of sizes in config file (in ```use_size``` part). 
+Then whenever you use "make" method (or adding sizes array with ```->resizeBy()```) it will automatically create images with specified sizes.
 
-Or if you want to customize that manually:
+Size setters:
 
 | setter                                    | description                                                                         |
 |-------------------------------------------|-------------------------------------------------------------------------------------|
@@ -140,66 +171,61 @@ Or if you want to customize that manually:
 | alsoResize( $width, $height, $as = null ) | adds a size                                                                         |
 | resizeBy( array )                         | resize by intended array(the structure shuold be like 'imageSizes' in configuration)|
 
-You may add resizeBy's array from configuration like ```->resizeBy(config('image.postSizes'))```.
+You may define multiple array of size in config file, and ```->resizeBy(config('image.postSizes'))```.
 
 
 ### Default size
 
-If you want to use default_size functionality, you can specify default size of the defined sizes in configuration, which affects on output array.
+If you want to use default_size functionality, you may define it in config file.
 
-When you want to update default_size:
+Or manually create or update default_size:
 
 ```php
 Image::setDefaultSizeFor($post->image, 'small');
 ```
 
-Will return previous array but default_size has changed.
+Will return previous array but default_size has changed or added.
 
 
-## result-array
+## Result array
 
-After creating image returns array, which
+After creating image it returns array, which
 
-```index``` key is array,or string(contains one, or more) image paths, which depends on number of sizes(if there be more than one size it's array).
+```index``` key is array,or string(contains one, or more) image paths, which depends on number of sizes.
 
 For example:
 
 ```php
 [
-  'index' => [
+  "index" => [
       "images/post/2021/12/08/1638966454/1638966454_491_large.png",
-      .
-      .
+      "images/post/2021/12/08/1638966454/1638966454_491_meduim.png",
       "images/post/2021/12/08/1638966454/1638966454_491_small.png",
    ]
    // or 
-   'index' => 'image path'
+   "index" => "image path"
    
-   'imageDirectory' => 'image directory'
-   
-   'default_size' => 'medium' (if you are using "default_size", and if you have more than one size)
+   "imageDirectory" => "image directory"
+   "default_size" => 'medium' (if you are using "default_size", and you have more than one size)
 ]
 ```
 
 ## Upsize or not
 
-If you want or don't want to use upsize of intervention you should:
+If you want to use upsize of intervention you should:
 
 ```php
-Image::
-  .
-  .
   ->save(true)
 ```
 
 ## Remove image(s)
 
-For deleting pass created image array:
+Pass created image array:
 
 ```php
 Image::rm($post->image);
 ```
-
+which returns ```true``` or ```false```.
 
 
 ## Examples
@@ -227,9 +253,9 @@ $post->delete;
 ```
 
 ```php
-$image = Image::setDefaultSizeFor($post->image,$request['default_size']);
+$image = Image::setDefaultSizeFor($post->image, $request['default_size']);
 
-if (!$request['image']) {
+if (!$image) {
   return back()
     ->withInput()
     ->withErrors(['image' => __('validation.uploaded')]);
