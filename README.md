@@ -98,6 +98,8 @@ saves in:
 It will create your image in some default path, and with those sizes, that you defined in config (in ```use_size``` part). 
 But how to customize directories, and sizes.
 
+For size customazations see [Size customazations](#size-customazations).
+
 ### Directory customazations
 
 In parantheses written name of each directory:
