@@ -7,12 +7,12 @@ trait Sizeable
     /**
      * @var array|null
      */
-    private $sizes;
+    public $sizes;
 
     /**
      * @var string|null
      */
-    private $defaultSize = null;
+    public $defaultSize = null;
 
     /**
      * @return array|bool

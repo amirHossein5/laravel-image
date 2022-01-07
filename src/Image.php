@@ -13,7 +13,7 @@ class Image
     /**
      * @var Illuminate\Http\UploadedFile
      */
-    private $image;
+    public $image;
 
     /**
      * @var bool
@@ -43,12 +43,16 @@ class Image
         $this->testMode = true;
     }
 
-    public function save($upsize = false)
+    public function save($upsize = false, ?\Closure $closure = null)
     {
         $this->setImagePath();
 
         if ($this->testMode) {
-            $resultArray = $this->getResultArrayStructure();
+            if ($closure instanceof \Closure) {
+                $resultArray = $closure($this);
+            } else {
+                $resultArray = $this->getResultArrayStructure();
+            }
             $this->reset();
             return $resultArray;
         }
@@ -77,7 +81,11 @@ class Image
             }
         }
 
-        $resultArray = $this->getResultArrayStructure();
+        if ($closure instanceof \Closure) {
+            $resultArray = $closure($this);
+        } else {
+            $resultArray = $this->getResultArrayStructure();
+        }
         $this->reset();
         return $resultArray;
     }

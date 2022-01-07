@@ -11,53 +11,53 @@ trait Pathable
      *
      * @var array|string
      */
-    private $imagePath;
+    public $imagePath;
 
     /**
      * @var string
      */
-    private $imageDirectory;
+    public $imageDirectory;
 
     /**
      * @var string
      */
-    private $rootDirectory;
+    public $rootDirectory;
 
     /**
      * @var string
      */
-    private $exclusiveDirectory;
+    public $exclusiveDirectory;
 
     /**
      * Like .../2021/12/2/...
      *
      * @var string
      */
-    private $archiveDirectories;
+    public $archiveDirectories;
 
     /**
      * Directory that if there be more than one size, will locate all of those images in this directory.
      *
      * @var string
      */
-    private $sizesDirectory;
+    public $sizesDirectory;
 
     /**
      * @var string
      */
-    private $imageName;
+    public $imageName;
 
     /**
      * @var string
      */
-    private $imageFormat;
+    public $imageFormat;
 
     /**
      * Path to save images in, when using "raw" method.
      *
      * @var string
      */
-    private $inPath;
+    public $inPath;
 
     /**
      * Is creating image in normal mode or raw mode.
