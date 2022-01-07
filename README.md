@@ -85,7 +85,17 @@ In ```make``` method defaults for directories and sizes will be set. Beacause of
     ->setExclusiveDirectory('post')
     ->save();
 ```
-it will create your image in some default path, and with sizes, which you defined in config file (in ```use_size``` part). 
+
+saves in:
+
+- ```public/``` 
+  - ```images/post/2021/12/2/1638611107/```
+    - ```1638611107_960_large.png```
+    - ```1638611107_960_medium.png```
+    - ```1638611107_960_small.png```
+
+
+It will create your image in some default path, and with those sizes, that you defined in config (in ```use_size``` part). 
 But how to customize directories, and sizes.
 
 ### Directory customazations
