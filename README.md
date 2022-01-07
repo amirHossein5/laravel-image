@@ -233,12 +233,15 @@ Image::make($this->image)
       'index' => $image->imagePath,
       'imageDirectory' => $image->imageDirectory
     ];
-  });
+  })
+  
   // or 
+  
   ->save(closure: fn ($image) => [
     'index' => $image->imagePath,
     'imageDirectory' => $image->imageDirectory
   ]);
+  
   
   // output
   
@@ -256,7 +259,7 @@ Image::make($this->image)
 
 ```
 
-properties:
+Properties:
 
 | Property | Description |
 |----------------------------|-----------------------------------------------------------|
