@@ -222,6 +222,59 @@ For example:
 ]
 ```
 
+### Getting result array manually
+
+```php
+
+Image::make($this->image)
+  ->setExclusiveDirectory('post')
+  ->save(false, function ($image) {
+    return [
+      'index' => $image->imagePath,
+      'imageDirectory' => $image->imageDirectory
+    ];
+  });
+  // or 
+  ->save(closure: fn ($image) => [
+    'index' => $image->imagePath,
+    'imageDirectory' => $image->imageDirectory
+  ]);
+  
+  // output
+  
+[
+  "index" => [
+      "images/post/2021/12/08/1638966454/1638966454_491_large.png",
+      "images/post/2021/12/08/1638966454/1638966454_491_meduim.png",
+      "images/post/2021/12/08/1638966454/1638966454_491_small.png",
+   ]
+   // or 
+   "index" => "image path"
+   
+   "imageDirectory" => "image directory"
+]
+```
+
+```
+
+properties:
+
+| Property | Description |
+|----------------------------|-----------------------------------------------------------|
+| $image->image              |    Uploaded image object.                                 |
+| $image->sizes              | All used sizes.                                           |
+| $image->default_size       | Default size.                                             |
+| $image->imagePath          | Full path of all stored images.                           |
+| $image->imageDirectory     | Image's directory.                                        |
+| $image->rootDirectory      | [see Directory customazations](#directory-customazations) |
+| $image->exclusiveDirectory | [see Directory customazations](#directory-customazations) |
+| $image->archiveDirectories | [see Directory customazations](#directory-customazations) |
+| $image->sizesDirectory     | [see Directory customazations](#directory-customazations) |
+| $image->imageName          | Image name.                                               |
+| $image->imageFormat        | Image format.                                             |
+| $image->inPath             | [see "raw" method](#raw-method)                           |
+
+
 ## Upsize or not
 
 If you want to use upsize of intervention you should:
