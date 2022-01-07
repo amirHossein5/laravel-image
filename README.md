@@ -253,7 +253,6 @@ Image::make($this->image)
    
    "imageDirectory" => "image directory"
 ]
-```
 
 ```
 
