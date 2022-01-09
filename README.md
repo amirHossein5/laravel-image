@@ -332,6 +332,21 @@ $post->image = $image;
 $post->save();
 ```
 
+```php
+$request['icon'] = Image::raw($request['icon'])
+    ->setImageName('icon')
+    ->setImageFormat('png')
+    ->inPublicPath()
+    ->save(false, function ($image) {
+        return $image->imagePath;
+    });
+if (!$request['icon']) {
+  return back()
+    ->withInput()
+    ->withErrors(['image' => __('validation.uploaded')]);
+}
+```
+
 
 <br/>
 
