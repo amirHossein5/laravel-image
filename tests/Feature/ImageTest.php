@@ -653,4 +653,56 @@ class ImageTest extends TestCase
             $this->assertArrayHasKey($sizeName, $image['index']);
         }
     }
+    
+    // save and replace
+//     public function test_saves_and_replaces_image_with_replace()
+//     {
+//         $image = Image::raw($this->image)
+//             ->inPublicPath()
+//             ->be('logo.png')
+//             ->replace(false, function($image) {
+//                 return $image->imagePath;
+//             });
+
+//         $this->assertFileExists(public_path($image));
+        
+//         $image = Image::raw($this->image)
+//             ->inPublicPath()
+//             ->be('logo.png')
+//             ->replace(false, function($image) {
+//                 return $image->imagePath;
+//             });
+        
+//         $this->assertTrue($image);
+//         $this->assertFileExists(public_path($image));
+        
+//         // for make method
+//         $images = Image::make($this->image)
+//             ->setExclusiveDirectory('post')
+//             ->setImageName('test')
+//             ->setSizesDirectory('test')
+//             ->replace(false, function($image) {
+//                 return $image->imagePath;
+//             });
+
+//         foreach ($images as $image) {
+//             $this->assertFileExists(public_path($image));
+//         }
+        
+        
+//         $images = Image::make($this->image)
+//             ->setExclusiveDirectory('post')
+//             ->setImageName('test')
+//             ->setSizesDirectory('test')
+//             ->replace(false, function($image) {
+//                 return $image->imagePath;
+//             });
+
+//         $this->assertTrue($images);
+        
+//         foreach ($images as $image) {
+//             $this->assertFileExists(public_path($image));
+//         }
+//     }
+    
 }
