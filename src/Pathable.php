@@ -113,6 +113,17 @@ trait Pathable
         $this->imageFormat = $format;
         return $this;
     }
+    
+    public function be(string $nameWithFormat): self
+    {
+        $this->imageFormat = preg_replace('/[\w]+\./i', '', $nameWithFormat);
+        
+        preg_match_all('/[\w]+\./i', $nameWithFormat, $name);
+
+        $this->imageName = trim(implode('', $name[0]), '.');
+        
+        return $this;
+    }
 
     private function setDefaultsForImagePath(): void
     {
