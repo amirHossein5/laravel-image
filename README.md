@@ -218,7 +218,7 @@ For example:
    // or 
    "index" => "image path"
    
-   "imageDirectory" => "image directory"
+   "imageDirectory" =>  "images/post/2021/12/08/1638966454"
    "default_size" => 'medium' (if you are using "default_size", and you have more than one size)
 ]
 ```
@@ -253,9 +253,9 @@ Image::make($this->image)
       "images/post/2021/12/08/1638966454/1638966454_491_small.png",
    ]
    // or 
-   "index" => "image path"
+   "index" => "images/post/2021/12/08/1638966454/"
    
-   "imageDirectory" => "image directory"
+   "imageDirectory" => "images/post/2021/12/08/1638966454"
 ]
 
 ```
@@ -267,7 +267,7 @@ Properties:
 | $image->image              |    Uploaded image object.                                 |
 | $image->sizes              | All used sizes.                                           |
 | $image->default_size       | Default size.                                             |
-| $image->imagePath          | Full path of all stored images.                           |
+| $image->imagePath          | Full path of stored image(s).                             |
 | $image->imageDirectory     | Image's directory.                                        |
 | $image->rootDirectory      | [see Directory customazations](#directory-customazations) |
 | $image->exclusiveDirectory | [see Directory customazations](#directory-customazations) |
@@ -275,7 +275,6 @@ Properties:
 | $image->sizesDirectory     | [see Directory customazations](#directory-customazations) |
 | $image->imageName          | Image name.                                               |
 | $image->imageFormat        | Image format.                                             |
-| $image->inPath             | [see "raw" method](#raw-method)                           |
 
 
 ## Upsize or not
