@@ -120,6 +120,7 @@ Image path setters:
 | setSizesDirectory( string )     | time()                                               |
 | setImageName( string )          | time()_rand(100, 999)_sizeName(if there be any size) |
 | setImageFormat( string )        | uploaded image format                                |
+| be( string )                    | sets both image name and format. e.g, ```->be('name.png)```|
 
 > Notice: root directory is also changeable in config file.
 
