@@ -102,6 +102,55 @@ class ImageTest extends TestCase
     /**
      * Tests for directory and size setters.
      */
+        public function test_be_method_sets_both_name_and_format_for_make_method()
+    {
+        Image::fake();
+
+        $image = Image::make($this->image)
+            ->setRootDirectory('root')
+            ->setExclusiveDirectory('post')
+            ->setArchiveDirectories('archive')
+            ->setSizesDirectory('size')
+            ->be('name.png')
+            ->save();
+
+        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size' . DIRECTORY_SEPARATOR . 'name_large.png', $image['index']['large']);
+        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size', $image['imageDirectory']);
+            
+
+        $image = Image::make($this->image)
+            ->setRootDirectory('root')
+            ->setExclusiveDirectory('post')
+            ->setArchiveDirectories('archive')
+            ->setSizesDirectory('size')
+            ->be('name.png.png')
+            ->save();
+
+        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size' . DIRECTORY_SEPARATOR . 'name.png_large.png', $image['index']['large']);
+        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size', $image['imageDirectory']);
+    }
+
+    public function test_be_method_sets_both_name_and_format_for_raw_method()
+    {
+        Image::fake();
+
+        $image = Image::raw($this->image)
+            ->inPath('post')
+            ->be('name.png')
+            ->save();
+
+        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name.png', $image['index']);
+        $this->assertEquals('post', $image['imageDirectory']);
+        
+        $image = Image::raw($this->image)
+            ->inPath('post')
+            ->be('name.png.png')
+            ->save();
+
+        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name.png.png', $image['index']);
+        $this->assertEquals('post', $image['imageDirectory']);
+    }
+    
     public function test_make_method_and_directory_setters_set_directories_correctly()
     {
         Image::fake();
