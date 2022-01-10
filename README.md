@@ -294,6 +294,29 @@ Image::rm($post->image);
 ```
 which returns ```true``` or ```false```.
 
+<!-- 
+## Replace image(s)
+
+```replace``` method works same as ```save``` method, but if there be image(s) with same name as this image, this will be replace.
+
+```php
+$image = Image::raw($this->image)
+    ->inPublicPath()
+    ->be('logo.png')
+    ->replace();
+ 
+// like save method
+
+if (!$image) {
+  // return error
+}    
+
+```
+
+It works for multipe images too.
+
+ -->
+
 
 ## Examples
 
@@ -332,10 +355,10 @@ $post->image = $image;
 $post->save();
 ```
 
+<!-- 
 ```php
 $request['icon'] = Image::raw($request['icon'])
-    ->setImageName('icon')
-    ->setImageFormat('png')
+    ->be('icon.png')
     ->inPublicPath()
     ->save(false, function ($image) {
         return $image->imagePath;
@@ -346,7 +369,7 @@ if (!$request['icon']) {
     ->withErrors(['image' => __('validation.uploaded')]);
 }
 ```
-
+ -->
 
 <br/>
 
