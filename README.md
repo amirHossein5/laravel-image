@@ -120,7 +120,7 @@ Image path setters:
 | setSizesDirectory( string )     | time()                                               |
 | setImageName( string )          | time()_rand(100, 999)_sizeName(if there be any size) |
 | setImageFormat( string )        | uploaded image format                                |
-<!-- | be( string )                    | sets both image name and format. e.g, ```->be('name.png)```|  -->
+| be( string )                    | sets both image name and format. e.g, ```->be('name.png)```| 
 
 > Notice: root directory is also changeable in config file.
 
@@ -339,7 +339,7 @@ if (! Image::wasRecentlyRemoved()) {
 ```
 
 
-<!-- 
+
 ## Replace image(s)
 
 ```replace``` method works same as ```save``` method, but if there be image(s) with same name as this image, this will be replace.
@@ -360,7 +360,7 @@ if (! $image) {
 
 It works for multipe images too.
 
- -->
+
 
 
 ## Examples
@@ -400,7 +400,7 @@ $post->image = $image;
 $post->save();
 ```
 
-<!-- 
+
 ```php
 $request['icon'] = Image::raw($request['icon'])
     ->be('icon.png')
@@ -414,7 +414,7 @@ if (!$request['icon']) {
     ->withErrors(['image' => __('validation.uploaded')]);
 }
 ```
- -->
+
 
 <br/>
 
