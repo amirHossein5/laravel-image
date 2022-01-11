@@ -759,4 +759,55 @@ class ImageTest extends TestCase
             $this->assertFileExists(public_path($image));
         }
     }
+    
+    
+    // save in storage
+//     public function test_images_can_be_save_in_storage() 
+//     {
+//         $images = Image::make($this->image)
+//             ->setExclusiveDirectory('post')
+//             ->storeStoragely()
+//             ->replace(false, function ($image) {
+//                 return $image->imagePath;
+//             });
+        
+//         // test file exist
+        
+//         $images = Image::make($this->image)
+//             ->setExclusiveDirectory('post')
+//             ->storeStoragely()
+//             ->rootDirectory('public/images')
+//             ->save(false, function ($image) {
+//                 return $image->imagePath;
+//             });
+        
+//         // test file exist in public storage
+        
+//         $image = Image::raw($this->image)
+//             ->storeStoragely()
+//             ->inStoragePath()
+//             ->be('logo.png')
+//             ->save(false, function ($image) {
+//                 return $image->imagePath;
+//             });
+
+//         $this->assertFileExists(storage_path($image));
+
+//         $image = Image::raw($this->image)
+//             ->inStoragePath()
+//             ->inPath('public/imgs')
+//             ->be('logo.png')
+//             ->replace(false, function ($image) {
+//                 return $image->imagePath;
+//             });
+        
+//         $this->assertFileExists(storage_path($image));
+        
+        
+// //         add test to result section for check result that is from storage
+//     }
+    
+    
+    
+    
 }
