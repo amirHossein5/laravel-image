@@ -287,12 +287,57 @@ If you want to use upsize of intervention you should:
 
 ## Remove image(s)
 
-Pass created image array:
+Pass created image:
 
 ```php
 Image::rm($post->image);
 ```
 which returns ```true``` or ```false```.
+
+</br>
+
+If you created your result array **manually** pass the key of array, which there is image path(s):
+
+```php
+
+$image = Image::make($this->image)
+  ->setExclusiveDirectory('post')
+  ->save(false, function ($image) {
+    return ['paths' => $image->imagePath];
+  });
+  
+Image::rm($image, 'paths');
+
+```
+
+or if it's one string path just pass it:
+
+```php
+Image::raw($this->image)
+  ->inPath('post/test')
+  ->save(false, function ($image) {
+    return $image->imagePath;
+  });
+  
+Image::rm($image);
+```
+
+to check that is removed, or not:
+
+```php
+
+if (! Image::rm($image)) {
+  // ...
+}
+
+// or 
+
+if (! Image::wasRecentlyRemoved()) {
+  // ...
+}
+
+```
+
 
 <!-- 
 ## Replace image(s)
@@ -307,8 +352,8 @@ $image = Image::raw($this->image)
  
 // like save method
 
-if (!$image) {
-  // return error
+if (! $image) {
+  // ...
 }    
 
 ```
