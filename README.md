@@ -285,7 +285,7 @@ If you want to use upsize of intervention you should:
   ->save(true)
 ```
 
-## Remove image(s)
+## Removeing image(s)
 
 Pass created image:
 
@@ -340,7 +340,7 @@ if (! Image::wasRecentlyRemoved()) {
 
 
 
-## Replace image(s)
+## Replaceing image(s)
 
 ```replace``` method works same as ```save``` method, but if there be image(s) with same name as this image, this will be replace.
 
