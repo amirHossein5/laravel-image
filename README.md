@@ -405,9 +405,10 @@ $post->save();
 $request['icon'] = Image::raw($request['icon'])
     ->be('icon.png')
     ->inPublicPath()
-    ->save(false, function ($image) {
+    ->replace(false, function ($image) {
         return $image->imagePath;
     });
+    
 if (!$request['icon']) {
   return back()
     ->withInput()
