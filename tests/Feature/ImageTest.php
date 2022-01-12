@@ -663,6 +663,55 @@ class ImageTest extends TestCase
         $this->assertEquals('small', $image['default_size']);
     }
 
+    public function test_changing_default_size_after_created_image_and_gotten_manually()
+    {
+        Image::fake();
+
+        $image = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->save(false, function ($image) {
+                return ['paths' => $image->imagePath];
+            });
+
+        $image = Image::setDefaultSizeFor($image, 'small', 'paths');
+
+        $this->assertEquals('small', $image['default_size']);
+
+        $image = Image::raw($this->image)
+            ->in('post')
+            ->resizeBy(config('image.imageSizes'))
+            ->save(false, function ($image) {
+                return ['paths' => $image->imagePath];
+            });
+
+        $image = Image::setDefaultSizeFor($image, 'small', 'paths');
+
+        $this->assertEquals('small', $image['default_size']);
+
+        config(['image.default_size' => 'small']);
+
+        $image = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->save(false, function ($image) {
+                return ['paths' => $image->imagePath];
+            });
+
+        $image = Image::setDefaultSizeFor($image, 'small', 'paths');
+
+        $this->assertEquals('small', $image['default_size']);
+
+        $image = Image::raw($this->image)
+            ->in('post')
+            ->resizeBy(config('image.imageSizes'))
+            ->save(false, function ($image) {
+                return ['paths' => $image->imagePath];
+            });
+
+        $image = Image::setDefaultSizeFor($image, 'small', 'paths');
+
+        $this->assertEquals('small', $image['default_size']);
+    }
+
     /**
      *
      */
