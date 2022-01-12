@@ -120,6 +120,8 @@ Image path setters:
 
 Just available for ```make```:
 
+| setter                          | default                                              |
+|---------------------------------|------------------------------------------------------|
 | setRootDirectory( string )      | images (written in config file)                      |
 | setExclusiveDirectory( string ) |                                                      |
 | setArchiveDirectories( string ) | year/month/day                                       |
@@ -144,16 +146,9 @@ For size customazations see [Size customazations](#size-customazations).
 
 ## "raw" method
 
-When you are using "raw" method like:
+When you are using "raw" method,
 
-```php
-Image::raw($image)
-  .
-  .
-  ->save()
-```
-
-Nothing will be automatically set(directories, and sizes). For setting directory of image there is two method:
+nothing will be automatically set(directories, and sizes). For setting directory of image there is two method:
 
 ```php
 Image::raw($image)
@@ -247,7 +242,7 @@ $image = Image::make($this->image)
 ```
 
 ```php
-Image::setDefaultSizeFor($post->image, 'small', 'paths);
+Image::setDefaultSizeFor($post->image, 'small', 'paths');
 ```
 
 
@@ -396,7 +391,7 @@ if (! Image::wasRecentlyRemoved()) {
 
 ```
 
-#### Remove in when used disk
+#### Remove when used disk
 
 If you created image with some disks do:
 
