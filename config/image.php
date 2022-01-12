@@ -18,6 +18,14 @@ return [
     'driver' => 'gd',
 
     /**
+     * Disks of paths.
+     */
+    'disks' => [
+        'public' => public_path(),
+        'storage' => storage_path('app')
+    ],
+
+    /**
      * The root directory of all of the images.
      * if you use "make" method you can modify it by "->setRootDirectory('directory name')" method.
      */

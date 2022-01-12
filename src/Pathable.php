@@ -57,7 +57,7 @@ trait Pathable
      *
      * @var string
      */
-    public $inPath;
+    public $in;
 
     /**
      * Is creating image in normal mode or raw mode.
@@ -66,15 +66,9 @@ trait Pathable
      */
     private $raw;
 
-    public function inPath(string $path): self
+    public function in(string $path): self
     {
-        $this->inPath = $path;
-        return $this;
-    }
-
-    public function inPublicPath(): self
-    {
-        $this->inPath = '';
+        $this->in = $path;
         return $this;
     }
 
@@ -132,6 +126,7 @@ trait Pathable
         $this->sizesDirectory = $this->random(false);
         $this->imageFormat = $this->image->getClientOriginalExtension();
         $this->imageName = $this->random();
+        $this->hiddenPath = config('image.disks.public');
     }
 
     private function setRawDefaults(): void
@@ -139,18 +134,19 @@ trait Pathable
         $this->sizesDirectory = $this->random(false);
         $this->imageFormat = $this->image->getClientOriginalExtension();
         $this->imageName = $this->random();
+        $this->hiddenPath = config('image.disks.public');
     }
 
     private function setImagePath(): void
     {
         if ($this->raw) {
-            if ($this->inPath === null) {
+            if ($this->in === null) {
                 throw new MissingParameter(
-                    'When you use "raw" method pass "$inPath" variable with "->inPath(place/of/created/image)".'
+                    'When you use "raw" method pass "$in" variable with "->in(place/of/created/image)".'
                 );
             }
             $this->prepareVariables();
-            $this->setImagePathAndDirectoryBySizes($this->inPath);
+            $this->setImagePathAndDirectoryBySizes($this->in);
 
             return;
         }
@@ -237,7 +233,7 @@ trait Pathable
     {
         if ($this->raw) {
             $this->sizesDirectory = trim($this->sizesDirectory, '/\\');
-            $this->inPath = trim($this->inPath, '/\\');
+            $this->in = trim($this->in, '/\\');
             return;
         }
         $this->rootDirectory = trim($this->rootDirectory, '/\\');

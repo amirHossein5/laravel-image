@@ -3,12 +3,19 @@
 namespace AmirHossein5\LaravelImage;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image as Intervention;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class Image
 {
-    use Sizeable, Pathable;
+    use Sizeable, Pathable, Removeable;
+
+    /**
+     * The hidden part of path which won't appear on result.
+     * 
+     * @var string|null
+     */
+    private $hiddenPath = null;
 
     /**
      * @var Illuminate\Http\UploadedFile
@@ -25,6 +32,17 @@ class Image
     public function wasRecentlyRemoved(): bool
     {
         return $this->wasRecentlyRemoved;
+    }
+
+    public function disk(string $disk): self
+    {
+        $this->hiddenPath = config("image.disks.{$disk}");
+
+        if (!$this->hiddenPath) {
+            throw new InvalidParameterException('Undefined disk ' . $disk);
+        }
+
+        return $this;
     }
 
     public function raw(UploadedFile $image): self
@@ -72,25 +90,25 @@ class Image
         }
 
         $image = Intervention::make($this->image);
-
+        
         if (!$this->sizes) {
-            $image->save(public_path($this->imagePath));
+            $image->save($this->disk_path($this->imagePath));
         } else if (count($this->sizes) === 1) {
             foreach ($this->sizes as $key => $size) {
                 $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
                     !$upsize ?: $constraint->upsize();
                 });
-                $image->save(public_path($this->imagePath));
+                $image->save($this->disk_path($this->imagePath));
             }
         } else if (count($this->sizes) > 1) {
             foreach ($this->sizes as $key => $size) {
                 $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
                     !$upsize ?: $constraint->upsize();
                 });
-                $image->save(public_path($this->imagePath[$key]));
+                $image->save($this->disk_path($this->imagePath[$key]));
             }
         }
-
+        
         if ($closure instanceof \Closure) {
             $resultArray = $closure($this);
         } else {
@@ -110,87 +128,22 @@ class Image
         if (!$this->removeIfExists($this->imagePath)) {
             return false;
         }
-
+        
         return $this->save($upsize, $closure);
-    }
-
-    /**
-     * @var string|array $image
-     * @var string|integer|null $removeIndex
-     */
-    public function rm($image, $removeIndex = null): bool
-    {
-        if (!$removeIndex) {
-            if (is_string($image)) {
-                return $this->wasRecentlyRemoved = unlink(public_path($image));
-            } else if (is_string($image['index'])) {
-                return $this->wasRecentlyRemoved = unlink(public_path($image['index']));
-            } else if (is_array($image['index'])) {
-                return $this->wasRecentlyRemoved = File::deleteDirectory(public_path($image['imageDirectory']));
-            }
-        }
-
-        if (is_string($image[$removeIndex])) {
-            return $this->wasRecentlyRemoved = unlink(public_path($image[$removeIndex]));
-        } else if (is_array($image[$removeIndex])) {
-
-            if (isset($image['imageDirectory'])) {
-                return $this->wasRecentlyRemoved = File::deleteDirectory(public_path($image['imageDirectory']));
-            }
-
-            $paths = array_values($image[$removeIndex]);
-
-            for ($i = 0; $i < count($paths); $i++) {
-                if ($i === 0) {
-                    $this->wasRecentlyRemoved = unlink(public_path($paths[$i]));
-                } else {
-                    $this->wasRecentlyRemoved =
-                        unlink(public_path($paths[$i])) and $this->wasRecentlyRemoved;
-                }
-            }
-
-            return $this->wasRecentlyRemoved;
-        }
-
-        return $this->wasRecentlyRemoved = false;
-    }
-
-    /**
-     * rm method returns false if not exists but this if exists removes.
-     * @var string|array $path
-     */
-    private function removeIfExists($path): bool
-    {
-        if (is_string($path)) {
-            if (file_exists(public_path($path))) {
-                $this->rm($path);
-
-                if (!$this->wasRecentlyRemoved) {
-                    return false;
-                }
-            }
-        } else if (is_array($path)) {
-            foreach ($path as $item) {
-                if (file_exists(public_path($item))) {
-                    $this->rm($item);
-
-                    if (!$this->wasRecentlyRemoved) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
     }
 
     private function mkdirIfNotExists(string $path): bool
     {
-        if (!file_exists(public_path($path))) {
-            return mkdir(public_path($path), 0777, true);
+        if (!file_exists($this->disk_path($path))) {
+            return mkdir($this->disk_path($path), 0777, true);
         }
 
         return true;
+    }
+
+    private function disk_path(string $path): string
+    {
+        return $this->hiddenPath . DIRECTORY_SEPARATOR . $path; 
     }
 
     private function reset(): void
