@@ -100,6 +100,70 @@ class ImageTest extends TestCase
             ->save();
     }
 
+    public function test_disk_will_be_return_in_result_array()
+    {
+        $images = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'public');
+
+        $images = Image::make($this->image)
+            ->disk('public')
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'public');
+
+        $images = Image::make($this->image)
+            ->disk('storage')
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'storage');
+
+        config(['image.disks.storage-public' => storage_path('public')]);
+
+        $images = Image::make($this->image)
+            ->disk('storage-public')
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'storage-public');
+
+        $images = Image::raw($this->image)
+            ->in('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'public');
+
+        $images = Image::raw($this->image)
+            ->in('')
+            ->disk('public')
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'public');
+
+        $images = Image::raw($this->image)
+            ->in('post')
+            ->disk('storage')
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'storage');
+
+        config(['image.disks.storage-public' => storage_path('public')]);
+
+        $images = Image::raw($this->image)
+            ->in('post')
+            ->disk('storage-public')
+            ->setExclusiveDirectory('post')
+            ->save();
+
+        $this->assertEquals($images['disk'], 'storage-public');
+    }
+
     /**
      * Tests for directory and size setters.
      */
@@ -621,16 +685,61 @@ class ImageTest extends TestCase
             $this->assertFalse(file_exists(public_path($path)));
         }
 
+        $random = $this->random();
+
         $image = Image::raw($this->image)
             ->in('')
+            ->be($random . '.png')
             ->save();
 
-        $this->assertFileExists(public_path($image['index']));
+        $this->assertFileExists(public_path($random . '.png'));
 
         Image::disk('public')->rm($image);
-
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFalse(file_exists(public_path($image['index'])));
+        $this->assertFalse(file_exists(public_path($random . '.png')));
+
+        $random = $this->random();
+
+        $image = Image::raw($this->image)
+            ->in('test')
+            ->be($random . '.png')
+            ->save();
+
+        $this->assertFileExists(public_path('test/' . $random . '.png'));
+
+        Image::disk('public')->rm($image);
+        $this->assertTrue(Image::wasRecentlyRemoved());
+        $this->assertFileDoesNotExist(public_path('test/' . $random . '.png'));
+
+
+
+        $random = $this->random();
+
+        $image = Image::raw($this->image)
+            ->in('')
+            ->be($random . '.png')
+            ->disk('storage')
+            ->save();
+
+        $this->assertFileExists(storage_path('app/' . $random . '.png'));
+
+        Image::disk('storage')->rm($image);
+        $this->assertTrue(Image::wasRecentlyRemoved());
+        $this->assertFileDoesNotExist(storage_path('app/test/' . $random . '.png'));
+
+        $random = $this->random();
+
+        $image = Image::raw($this->image)
+            ->in('test')
+            ->disk('storage')
+            ->be($random . '.png')
+            ->save();
+
+        $this->assertFileExists(storage_path('app/test/' . $random . '.png'));
+
+        Image::disk('storage')->rm($image);
+        $this->assertTrue(Image::wasRecentlyRemoved());
+        $this->assertFileDoesNotExist(storage_path('app/test/' . $random . '.png'));
     }
 
     public function test_rm_works_with_getted_menually_array()
@@ -776,8 +885,85 @@ class ImageTest extends TestCase
         $this->expectExceptionMessage('Undefined disk storage-public');
     }
 
+    public function test_disk_property_can_be_get_in_manually_way()
+    {
+        $images = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->disk('public')
+            ->replace(false, function ($image) {
+                return ['index' => $image->imagePath, 'disk' => $image->disk];
+            });
+
+        foreach ($images['index'] as $image) {
+            $this->assertFileExists($this->disk_path($images['disk'], $image));
+        }
+
+        $images = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->disk('storage')
+            ->replace(false, function ($image) {
+                return ['index' => $image->imagePath, 'disk' => $image->disk];
+            });
+
+        foreach ($images['index'] as $image) {
+            $this->assertFileExists($this->disk_path($images['disk'], $image));
+        }
+
+        config(['image.disks.storage-public' => storage_path('public')]);
+
+        $images = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->disk('storage-public')
+            ->setRootDirectory('all')
+            ->save(false, function ($image) {
+                return ['index' => $image->imagePath, 'disk' => $image->disk];
+            });
+
+        foreach ($images['index'] as $image) {
+            $this->assertFileExists($this->disk_path($images['disk'], $image));
+        }
+
+
+        $image = Image::raw($this->image)
+            ->disk('public')
+            ->in('')
+            ->be('logo.png')
+            ->save();
+
+        $this->assertFileExists($this->disk_path($image['disk'], $image['index']));
+
+        $image = Image::raw($this->image)
+            ->disk('storage')
+            ->in('')
+            ->be('logo.png')
+            ->save(false, function ($image) {
+                return ['index' => $image->imagePath, 'disk' => $image->disk];
+            });
+
+        $this->assertFileExists($this->disk_path($image['disk'], $image['index']));
+
+        $image = Image::raw($this->image)
+            ->disk('storage-public')
+            ->in('')
+            ->be('logo.png')
+            ->replace(false, function ($image) {
+                return ['index' => $image->imagePath, 'disk' => $image->disk];
+            });
+
+        $this->assertFileExists($this->disk_path($image['disk'], $image['index']));
+    }
+
     public function test_disk_works()
     {
+        $images = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->disk('storage')
+            ->save();
+
+        foreach ($images['index'] as $image) {
+            $this->assertFileExists(storage_path('app/' . $image));
+        }
+
         $images = Image::make($this->image)
             ->setExclusiveDirectory('post')
             ->disk('public')
@@ -923,13 +1109,11 @@ class ImageTest extends TestCase
         $image = Image::raw($this->image)
             ->disk('public')
             ->in('')
-            ->be('logo.png')
             ->save(false, function ($image) {
                 return $image->imagePath;
             });
 
         $this->assertFileExists(public_path($image));
-
         $this->assertTrue(Image::disk('public')->rm(['index' => $image], 'index'));
         $this->assertTrue(Image::wasRecentlyRemoved());
 

@@ -11,6 +11,11 @@ class TestCase extends TestbenchTestCase
 {
     protected UploadedFile $image;
 
+    protected function disk_path(string $disk, string $path): string
+    {
+        return config('image.disks.' . $disk) . DIRECTORY_SEPARATOR . $path;
+    }
+
     protected function getPackageProviders($app)
     {
         return [

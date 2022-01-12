@@ -107,15 +107,15 @@ trait Pathable
         $this->imageFormat = $format;
         return $this;
     }
-    
+
     public function be(string $nameWithFormat): self
     {
         $this->imageFormat = preg_replace('/[\w]+\./i', '', $nameWithFormat);
-        
+
         preg_match_all('/[\w]+\./i', $nameWithFormat, $name);
 
         $this->imageName = trim(implode('', $name[0]), '.');
-        
+
         return $this;
     }
 
@@ -127,6 +127,7 @@ trait Pathable
         $this->imageFormat = $this->image->getClientOriginalExtension();
         $this->imageName = $this->random();
         $this->hiddenPath = config('image.disks.public');
+        $this->disk = 'public';
     }
 
     private function setRawDefaults(): void
@@ -135,6 +136,7 @@ trait Pathable
         $this->imageFormat = $this->image->getClientOriginalExtension();
         $this->imageName = $this->random();
         $this->hiddenPath = config('image.disks.public');
+        $this->disk = 'public';
     }
 
     private function setImagePath(): void
@@ -184,7 +186,7 @@ trait Pathable
 
     private function getArrayStructure(): array
     {
-        $resultArrayStructure = ['index', 'imageDirectory', 'default_size'];
+        $resultArrayStructure = ['index', 'imageDirectory', 'default_size', 'disk'];
         return array_flip($resultArrayStructure);
     }
 
@@ -193,6 +195,7 @@ trait Pathable
         $arrayStructure = $this->getArrayStructure();
         $arrayStructure['index'] = $this->imagePath;
         $arrayStructure['imageDirectory'] = $this->imageDirectory;
+        $arrayStructure['disk'] = $this->disk;
 
         if (count($this->sizes ?? []) > 1 and $this->defaultSize) {
             $arrayStructure['default_size'] = $this->defaultSize;

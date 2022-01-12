@@ -18,6 +18,11 @@ class Image
     private $hiddenPath = null;
 
     /**
+     * @var string|null
+     */
+    public $disk = null;
+
+    /**
      * @var Illuminate\Http\UploadedFile
      */
     public $image;
@@ -41,6 +46,8 @@ class Image
         if (!$this->hiddenPath) {
             throw new InvalidParameterException('Undefined disk ' . $disk);
         }
+
+        $this->disk = $disk;
 
         return $this;
     }
@@ -90,7 +97,7 @@ class Image
         }
 
         $image = Intervention::make($this->image);
-        
+
         if (!$this->sizes) {
             $image->save($this->disk_path($this->imagePath));
         } else if (count($this->sizes) === 1) {
