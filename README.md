@@ -104,7 +104,7 @@ For size customazations see [Size customazations](#size-customazations).
 
 In parantheses written name of each directory:
 
-```public/``` 
+
 - ```images(rootDirectory)```
 - ```/post(exclusiveDirectory)```
 - ```/2021/12/2/(archiveDirectories)```
@@ -114,13 +114,16 @@ Image path setters:
 
 | setter                          | default                                              |
 |---------------------------------|------------------------------------------------------|
+| setImageName( string )          | time()_rand(100, 999)_sizeName(if there be any size) |
+| setImageFormat( string )        | uploaded image format                                |
+| be( string )                    | sets both image name and format. e.g, ```->be('name.png)```| 
+
+Just available for ```make```:
+
 | setRootDirectory( string )      | images (written in config file)                      |
 | setExclusiveDirectory( string ) |                                                      |
 | setArchiveDirectories( string ) | year/month/day                                       |
 | setSizesDirectory( string )     | time()                                               |
-| setImageName( string )          | time()_rand(100, 999)_sizeName(if there be any size) |
-| setImageFormat( string )        | uploaded image format                                |
-| be( string )                    | sets both image name and format. e.g, ```->be('name.png)```| 
 
 > Notice: root directory is also changeable in config file.
 
@@ -154,14 +157,14 @@ Nothing will be automatically set(directories, and sizes). For setting directory
 
 ```php
 Image::raw($image)
-  ->inPath('book')
+  ->in('book')
   ->save()
   
 // without resizing
 // will be save in public/book/ 
 
 Image::raw($image)
-  ->inPublicPath()
+  ->in('')
   ->save()
   
 // without resizing
@@ -169,6 +172,38 @@ Image::raw($image)
 ```
 
 For add size, and size customazations see [Size customazations](#size-customazations).
+
+## Save in storage
+
+For saving into storage folder you can use disks, which defined in config:
+
+```php
+'disks' => [
+    'public' => public_path(),
+    'storage' => storage_path('app')
+]
+```
+
+By default it's ```public```.
+
+```php
+$images = Image::make($image)
+  ->setExclusiveDirectory('post')
+  ->disk('storage')
+  ->save();
+```
+
+Will be:
+
+- ```storage/app/``` 
+  - ```images/post/2021/12/2/1638611107/```
+    - ```1638611107_960_large.png```
+    - ```1638611107_960_medium.png```
+    - ```1638611107_960_small.png```
+
+You may add more disks and use from that.
+
+
 
 ## Size customazations
 
@@ -191,13 +226,31 @@ You may define multiple array of size in config file, and ```->resizeBy(config('
 
 If you want to use default_size functionality, you may define it in config file.
 
-Or manually create or update default_size:
+Or create, update default_size:
 
 ```php
 Image::setDefaultSizeFor($post->image, 'small');
 ```
 
 Will return previous array but default_size has changed or added.
+
+If you created your result array **manually** pass the key of array, which there is image path(s):
+
+```php
+$image = Image::make($this->image)
+  ->setExclusiveDirectory('post')
+  ->save(false, function ($image) {
+    return [
+      'paths' => $image->imagePath,
+    ];
+  });
+```
+
+```php
+Image::setDefaultSizeFor($post->image, 'small', 'paths);
+```
+
+
 
 
 ## Result array
@@ -220,6 +273,7 @@ For example:
    
    "imageDirectory" =>  "images/post/2021/12/08/1638966454"
    "default_size" => 'medium' (if you are using "default_size", and you have more than one size)
+   "disk" => 'public'
 ]
 ```
 
@@ -232,7 +286,8 @@ Image::make($this->image)
   ->save(false, function ($image) {
     return [
       'index' => $image->imagePath,
-      'imageDirectory' => $image->imageDirectory
+      'imageDirectory' => $image->imageDirectory,
+      'disk' => $image->disk,
     ];
   })
   
@@ -240,7 +295,8 @@ Image::make($this->image)
   
   ->save(closure: fn ($image) => [
     'index' => $image->imagePath,
-    'imageDirectory' => $image->imageDirectory
+    'imageDirectory' => $image->imageDirectory,
+    'disk' => $image->disk,
   ]);
   
   
@@ -256,6 +312,7 @@ Image::make($this->image)
    "index" => "images/post/2021/12/08/1638966454/"
    
    "imageDirectory" => "images/post/2021/12/08/1638966454"
+    "disk" => 'public'
 ]
 
 ```
@@ -269,12 +326,13 @@ Properties:
 | $image->default_size       | Default size.                                             |
 | $image->imagePath          | Full path of stored image(s).                             |
 | $image->imageDirectory     | Image's directory.                                        |
+| $image->imageName          | Image name.                                               |
+| $image->imageFormat        | Image format.                                             |
+| $image->disk               | [Disk](#save-in-storage)                                  |
 | $image->rootDirectory      | [see Directory customazations](#directory-customazations) |
 | $image->exclusiveDirectory | [see Directory customazations](#directory-customazations) |
 | $image->archiveDirectories | [see Directory customazations](#directory-customazations) |
 | $image->sizesDirectory     | [see Directory customazations](#directory-customazations) |
-| $image->imageName          | Image name.                                               |
-| $image->imageFormat        | Image format.                                             |
 
 
 ## Upsize or not
@@ -314,7 +372,7 @@ or if it's one string path just pass it:
 
 ```php
 Image::raw($this->image)
-  ->inPath('post/test')
+  ->in('post/test')
   ->save(false, function ($image) {
     return $image->imagePath;
   });
@@ -338,6 +396,19 @@ if (! Image::wasRecentlyRemoved()) {
 
 ```
 
+#### Remove in when used disk
+
+If you created image with some disks do:
+
+```php
+....
+  ->disk('storage')
+....
+  
+Image::disk('storage)->rm($image);
+```
+
+
 
 
 ## Replaceing image(s)
@@ -346,7 +417,7 @@ if (! Image::wasRecentlyRemoved()) {
 
 ```php
 $image = Image::raw($this->image)
-    ->inPublicPath()
+    ->in('')
     ->be('logo.png')
     ->replace();
  
@@ -404,7 +475,7 @@ $post->save();
 ```php
 $request['icon'] = Image::raw($request['icon'])
     ->be('icon.png')
-    ->inPublicPath()
+    ->in('')
     ->replace(false, function ($image) {
         return $image->imagePath;
     });
