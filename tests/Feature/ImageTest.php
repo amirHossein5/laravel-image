@@ -725,7 +725,7 @@ class ImageTest extends TestCase
             $this->assertFileExists(public_path($path));
         }
 
-        Image::disk('public')->rm($image);
+        Image::rm($image);
 
         $this->assertTrue(Image::wasRecentlyRemoved());
         $this->assertFalse(file_exists(public_path($image['imageDirectory'])));
@@ -743,7 +743,7 @@ class ImageTest extends TestCase
 
         $this->assertFileExists(public_path($random . '.png'));
 
-        Image::disk('public')->rm($image);
+        Image::rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
         $this->assertFalse(file_exists(public_path($random . '.png')));
 
