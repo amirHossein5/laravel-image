@@ -12,6 +12,8 @@ trait Removeable
      */
     public function rm($image, $removeIndex = null): bool
     {
+        $this->setDisk();
+        
         if (!$removeIndex) {
             if (is_string($image)) {
                 return $this->wasRecentlyRemoved = unlink($this->disk_path($image));
@@ -75,5 +77,12 @@ trait Removeable
         }
 
         return true;
+    }
+    
+    private function setDisk(): void
+    {
+        if (! $this->disk) {
+            $this->disk('public');
+        }
     }
 }
