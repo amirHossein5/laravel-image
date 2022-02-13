@@ -81,9 +81,11 @@ And finally you may specify your sizes in configuration:
 In ```make``` method defaults for directories and sizes will be set. Beacause of this, when you use:
 
 ```php
-  Image::make($request->image)
-    ->setExclusiveDirectory('post')
-    ->save();
+use AmirHossein5\LaravelImage\Facades\Image;
+
+Image::make($request->image)
+  ->setExclusiveDirectory('post')
+  ->save();
 ```
 
 saves in:
@@ -427,6 +429,15 @@ if (! $image) {
 It works for multipe images too.
 
 
+## Testing
+
+If you don't want to image be ceate use fake before your code:
+
+```php
+Image::fake();
+
+Image:: ...
+```
 
 
 ## Examples
