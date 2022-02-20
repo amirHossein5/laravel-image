@@ -78,7 +78,7 @@ class Image
     /**
      * @return mixed
      */
-    public function save($upsize = false, ?\Closure $closure = null)
+    public function save(bool $upsize = false, ?\Closure $closure = null)
     {
         $this->setImagePath();
 
@@ -128,7 +128,7 @@ class Image
     /**
      * @return mixed
      */
-    public function replace($upsize = false, ?\Closure $closure = null)
+    public function replace(bool $upsize = false, ?\Closure $closure = null)
     {
         $this->setImagePath();
 

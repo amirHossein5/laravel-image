@@ -402,7 +402,7 @@ If you created image with some disks do:
   ->disk('storage')
 ....
   
-Image::disk('storage)->rm($image);
+Image::disk('storage')->rm($image);
 ```
 
 
