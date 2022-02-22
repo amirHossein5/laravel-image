@@ -10,10 +10,10 @@ class ImageServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/image.php' => config_path('image.php'),
+            __DIR__.'/../config/image.php' => config_path('image.php'),
         ], 'image');
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/image.php',
+            __DIR__.'/../config/image.php',
             'image'
         );
     }

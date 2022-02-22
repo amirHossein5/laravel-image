@@ -69,42 +69,49 @@ trait Pathable
     public function in(string $path): self
     {
         $this->in = $path;
+
         return $this;
     }
 
     public function setExclusiveDirectory(string $directory): self
     {
         $this->exclusiveDirectory = $directory;
+
         return $this;
     }
 
     public function setRootDirectory(string $directory): self
     {
         $this->rootDirectory = $directory;
+
         return $this;
     }
 
     public function setArchiveDirectories(string $directories): self
     {
         $this->archiveDirectories = $directories;
+
         return $this;
     }
 
     public function setSizesDirectory(string $directory): self
     {
         $this->sizesDirectory = $directory;
+
         return $this;
     }
 
     public function setImageName(string $name): self
     {
         $this->imageName = $name;
+
         return $this;
     }
 
     public function setImageFormat(string $format): self
     {
         $this->imageFormat = $format;
+
         return $this;
     }
 
@@ -122,7 +129,7 @@ trait Pathable
     private function setDefaultsForImagePath(): void
     {
         $this->rootDirectory = config('image.root_directory');
-        $this->archiveDirectories = $this->convertByDirectorySeparator(date('Y') . '/' . date('m') . '/' . date('d'));
+        $this->archiveDirectories = $this->convertByDirectorySeparator(date('Y').'/'.date('m').'/'.date('d'));
         $this->sizesDirectory = $this->random(false);
         $this->imageFormat = $this->image->getClientOriginalExtension();
         $this->imageName = $this->random();
@@ -167,16 +174,16 @@ trait Pathable
     {
         if (!$this->sizes) {
             $imageDirectory = $template;
-            $resultPath = $imageDirectory . "/{$this->imageName}.{$this->imageFormat}";
-        } else if (count($this->sizes) === 1) {
+            $resultPath = $imageDirectory."/{$this->imageName}.{$this->imageFormat}";
+        } elseif (count($this->sizes) === 1) {
             $sizeName = array_keys($this->sizes)[0];
             $imageDirectory = $template;
-            $resultPath = $imageDirectory . "/{$this->imageName}_{$sizeName}.{$this->imageFormat}";
-        } else if (count($this->sizes) > 1) {
+            $resultPath = $imageDirectory."/{$this->imageName}_{$sizeName}.{$this->imageFormat}";
+        } elseif (count($this->sizes) > 1) {
             foreach ($this->sizes as $sizeName => $size) {
-                $imageDirectory = $template . "/{$this->sizesDirectory}";
+                $imageDirectory = $template."/{$this->sizesDirectory}";
                 $resultPath[$sizeName] =
-                    $imageDirectory . "/{$this->imageName}_{$sizeName}.{$this->imageFormat}";
+                    $imageDirectory."/{$this->imageName}_{$sizeName}.{$this->imageFormat}";
             }
         }
 
@@ -187,6 +194,7 @@ trait Pathable
     private function getArrayStructure(): array
     {
         $resultArrayStructure = ['index', 'imageDirectory', 'default_size', 'disk'];
+
         return array_flip($resultArrayStructure);
     }
 
@@ -215,21 +223,24 @@ trait Pathable
     {
         if (is_string($path)) {
             $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
             return str_replace('\\', DIRECTORY_SEPARATOR, $path);
         }
         foreach ($path as $key => $path) {
             $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
             $resultPath[$key] = str_replace('\\', DIRECTORY_SEPARATOR, $path);
         }
+
         return $resultPath;
     }
 
     private function random(bool $hasSuffix = true, string $suffix = null): string
     {
         if ($hasSuffix) {
-            $suffix = $suffix ? '_' . $suffix : '_' . rand(100, 999);
+            $suffix = $suffix ? '_'.$suffix : '_'.rand(100, 999);
         }
-        return time() . $suffix;
+
+        return time().$suffix;
     }
 
     private function prepareVariables(): void
@@ -237,6 +248,7 @@ trait Pathable
         if ($this->raw) {
             $this->sizesDirectory = trim($this->sizesDirectory, '/\\');
             $this->in = trim($this->in, '/\\');
+
             return;
         }
         $this->rootDirectory = trim($this->rootDirectory, '/\\');

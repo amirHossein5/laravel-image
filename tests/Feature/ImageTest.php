@@ -50,7 +50,7 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->save();
 
-        $this->assertEquals(DIRECTORY_SEPARATOR . 'name.png', $image['index']);
+        $this->assertEquals(DIRECTORY_SEPARATOR.'name.png', $image['index']);
     }
 
     public function test_make_method_sets_defaults_for_directories_and_sizes()
@@ -62,13 +62,13 @@ class ImageTest extends TestCase
             ->save();
 
         $this->assertEquals(
-            config('image.root_directory') . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . date('Y') . DIRECTORY_SEPARATOR . date('m') . DIRECTORY_SEPARATOR . date('d') . DIRECTORY_SEPARATOR . $this->random(false),
+            config('image.root_directory').DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.date('Y').DIRECTORY_SEPARATOR.date('m').DIRECTORY_SEPARATOR.date('d').DIRECTORY_SEPARATOR.$this->random(false),
             $image['imageDirectory']
         );
 
         $this->assertArrayNotHasKey('default_size', $image);
 
-        foreach (config('image.' . config('image.use_size')) as $sizeName => $size) {
+        foreach (config('image.'.config('image.use_size')) as $sizeName => $size) {
             $this->assertArrayHasKey($sizeName, $image['index']);
         }
     }
@@ -82,7 +82,7 @@ class ImageTest extends TestCase
             ->setImageName('name')
             ->save();
 
-        $this->assertEquals('test' . DIRECTORY_SEPARATOR . 'name.' . $this->image->getClientOriginalExtension(), $imageResult['index']);
+        $this->assertEquals('test'.DIRECTORY_SEPARATOR.'name.'.$this->image->getClientOriginalExtension(), $imageResult['index']);
         $this->assertEquals('test', $imageResult['imageDirectory']);
         $this->assertArrayNotHasKey('default_size', $imageResult);
     }
@@ -179,9 +179,8 @@ class ImageTest extends TestCase
             ->be('name.png')
             ->save();
 
-        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size' . DIRECTORY_SEPARATOR . 'name_large.png', $image['index']['large']);
-        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size', $image['imageDirectory']);
-
+        $this->assertEquals('root'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'archive'.DIRECTORY_SEPARATOR.'size'.DIRECTORY_SEPARATOR.'name_large.png', $image['index']['large']);
+        $this->assertEquals('root'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'archive'.DIRECTORY_SEPARATOR.'size', $image['imageDirectory']);
 
         $image = Image::make($this->image)
             ->setRootDirectory('root')
@@ -191,8 +190,8 @@ class ImageTest extends TestCase
             ->be('name.png.png')
             ->save();
 
-        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size' . DIRECTORY_SEPARATOR . 'name.png_large.png', $image['index']['large']);
-        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size', $image['imageDirectory']);
+        $this->assertEquals('root'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'archive'.DIRECTORY_SEPARATOR.'size'.DIRECTORY_SEPARATOR.'name.png_large.png', $image['index']['large']);
+        $this->assertEquals('root'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'archive'.DIRECTORY_SEPARATOR.'size', $image['imageDirectory']);
     }
 
     public function test_be_method_sets_both_name_and_format_for_raw_method()
@@ -204,7 +203,7 @@ class ImageTest extends TestCase
             ->be('name.png')
             ->save();
 
-        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name.png', $image['index']);
+        $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name.png', $image['index']);
         $this->assertEquals('post', $image['imageDirectory']);
 
         $image = Image::raw($this->image)
@@ -212,7 +211,7 @@ class ImageTest extends TestCase
             ->be('name.png.png')
             ->save();
 
-        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name.png.png', $image['index']);
+        $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name.png.png', $image['index']);
         $this->assertEquals('post', $image['imageDirectory']);
     }
 
@@ -229,8 +228,8 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->save();
 
-        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size' . DIRECTORY_SEPARATOR . 'name_large.png', $image['index']['large']);
-        $this->assertEquals('root' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'archive' . DIRECTORY_SEPARATOR . 'size', $image['imageDirectory']);
+        $this->assertEquals('root'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'archive'.DIRECTORY_SEPARATOR.'size'.DIRECTORY_SEPARATOR.'name_large.png', $image['index']['large']);
+        $this->assertEquals('root'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'archive'.DIRECTORY_SEPARATOR.'size', $image['imageDirectory']);
     }
 
     public function test_raw_method_and_directory_setters_set_directories_correctly()
@@ -243,7 +242,7 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->save();
 
-        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name.png', $image['index']);
+        $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name.png', $image['index']);
         $this->assertEquals('post', $image['imageDirectory']);
     }
 
@@ -255,11 +254,11 @@ class ImageTest extends TestCase
             ->setExclusiveDirectory('post')
             ->save();
 
-        foreach (config('image.' . config('image.use_size')) as $sizeName => $size) {
+        foreach (config('image.'.config('image.use_size')) as $sizeName => $size) {
             $this->assertArrayHasKey($sizeName, $image['index']);
         }
 
-        $this->assertStringContainsString(DIRECTORY_SEPARATOR . $this->random(false), $image['imageDirectory']);
+        $this->assertStringContainsString(DIRECTORY_SEPARATOR.$this->random(false), $image['imageDirectory']);
     }
 
     public function test_with_raw_method_and_default_sizes_sets_correct_imagePath_and_imageDirectory()
@@ -272,7 +271,7 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->save();
 
-        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name.png', $image['index']);
+        $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name.png', $image['index']);
         $this->assertEquals('post', $image['imageDirectory']);
     }
 
@@ -288,8 +287,8 @@ class ImageTest extends TestCase
             ->autoResize()
             ->save();
 
-        $this->assertEquals('images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch', $image['imageDirectory']);
-        $this->assertEquals('images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch' . DIRECTORY_SEPARATOR . 'name.png', $image['index']);
+        $this->assertEquals('images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch', $image['imageDirectory']);
+        $this->assertEquals('images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch'.DIRECTORY_SEPARATOR.'name.png', $image['index']);
 
         $image = Image::make($this->image)
             ->setExclusiveDirectory('post')
@@ -299,8 +298,8 @@ class ImageTest extends TestCase
             ->resize('50', 20)
             ->save();
 
-        $this->assertEquals('images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch', $image['imageDirectory']);
-        $this->assertEquals('images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch' . DIRECTORY_SEPARATOR . 'name_0.png', $image['index']);
+        $this->assertEquals('images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch', $image['imageDirectory']);
+        $this->assertEquals('images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch'.DIRECTORY_SEPARATOR.'name_0.png', $image['index']);
 
         $image = Image::make($this->image)
             ->setExclusiveDirectory('post')
@@ -310,8 +309,8 @@ class ImageTest extends TestCase
             ->resize('50', 20, 'large')
             ->save();
 
-        $this->assertEquals('images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch', $image['imageDirectory']);
-        $this->assertEquals('images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch' . DIRECTORY_SEPARATOR . 'name_large.png', $image['index']);
+        $this->assertEquals('images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch', $image['imageDirectory']);
+        $this->assertEquals('images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch'.DIRECTORY_SEPARATOR.'name_large.png', $image['index']);
     }
 
     public function test_with_raw_method_without_or_one_size_returns_correct_imageDirectory_and_imagePath()
@@ -326,7 +325,7 @@ class ImageTest extends TestCase
             ->save();
 
         $this->assertEquals('post', $image['imageDirectory']);
-        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name_0.png', $image['index']);
+        $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name_0.png', $image['index']);
 
         $image = Image::raw($this->image)
             ->in('post')
@@ -336,7 +335,7 @@ class ImageTest extends TestCase
             ->save();
 
         $this->assertEquals('post', $image['imageDirectory']);
-        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'name_large.png', $image['index']);
+        $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name_large.png', $image['index']);
     }
 
     public function test_make_method_with_more_than_one_given_size_returns_correct_path()
@@ -352,13 +351,13 @@ class ImageTest extends TestCase
             ->alsoResize(100, 50, 'large')
             ->save();
 
-        $expectedPath = 'images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch' . DIRECTORY_SEPARATOR . $this->random(false);
+        $expectedPath = 'images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch'.DIRECTORY_SEPARATOR.$this->random(false);
         $this->assertEquals($expectedPath, $image['imageDirectory']);
         $this->assertTrue(array_key_exists(0, $image['index']));
         $this->assertTrue(array_key_exists('large', $image['index']));
 
         foreach ($image['index'] as $sizeName => $path) {
-            $this->assertEquals($expectedPath . DIRECTORY_SEPARATOR . "name_{$sizeName}.png", $path);
+            $this->assertEquals($expectedPath.DIRECTORY_SEPARATOR."name_{$sizeName}.png", $path);
         }
     }
 
@@ -374,15 +373,15 @@ class ImageTest extends TestCase
             ->alsoResize(100, 50, 'large')
             ->save();
 
-        $expectedPath = 'post' . DIRECTORY_SEPARATOR . $this->random(false);
+        $expectedPath = 'post'.DIRECTORY_SEPARATOR.$this->random(false);
         $this->assertEquals($expectedPath, $image['imageDirectory']);
         $this->assertTrue(array_key_exists(0, $image['index']));
         $this->assertTrue(array_key_exists('large', $image['index']));
-        $this->assertEquals($expectedPath . DIRECTORY_SEPARATOR . "name_0.png", $image['index'][0]);
-        $this->assertEquals($expectedPath . DIRECTORY_SEPARATOR . "name_large.png", $image['index']['large']);
+        $this->assertEquals($expectedPath.DIRECTORY_SEPARATOR.'name_0.png', $image['index'][0]);
+        $this->assertEquals($expectedPath.DIRECTORY_SEPARATOR.'name_large.png', $image['index']['large']);
 
         foreach ($image['index'] as $sizeName => $path) {
-            $this->assertEquals($expectedPath . DIRECTORY_SEPARATOR . "name_{$sizeName}.png", $path);
+            $this->assertEquals($expectedPath.DIRECTORY_SEPARATOR."name_{$sizeName}.png", $path);
         }
     }
 
@@ -396,7 +395,7 @@ class ImageTest extends TestCase
             ->save();
 
         $this->assertStringContainsString(
-            '1' . DIRECTORY_SEPARATOR . '2' . DIRECTORY_SEPARATOR . '3' . DIRECTORY_SEPARATOR,
+            '1'.DIRECTORY_SEPARATOR.'2'.DIRECTORY_SEPARATOR.'3'.DIRECTORY_SEPARATOR,
             $image['imageDirectory']
         );
     }
@@ -473,7 +472,7 @@ class ImageTest extends TestCase
             ->resize(10, 10, 'large')
             ->save();
 
-        $this->assertEquals($image['index'], 'images' . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . 'arch' . DIRECTORY_SEPARATOR . 'name_large.png');
+        $this->assertEquals($image['index'], 'images'.DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.'arch'.DIRECTORY_SEPARATOR.'name_large.png');
 
         $image = Image::raw($this->image)
             ->in('post')
@@ -498,7 +497,7 @@ class ImageTest extends TestCase
             ->resize(10, 10, 'large')
             ->save();
 
-        $this->assertStringContainsString($image['index'], 'post' . DIRECTORY_SEPARATOR . 'name_large.png');
+        $this->assertStringContainsString($image['index'], 'post'.DIRECTORY_SEPARATOR.'name_large.png');
     }
 
     public function test_also_resize_adds_size()
@@ -530,9 +529,9 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->resizeBy([
                 'large' => [
-                    'width' => '200',
-                    'height' => 300
-                ]
+                    'width'  => '200',
+                    'height' => 300,
+                ],
             ])
             ->save();
 
@@ -546,9 +545,9 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->resizeBy([
                 'large' => [
-                    'width' => '200',
-                    'height' => 300
-                ]
+                    'width'  => '200',
+                    'height' => 300,
+                ],
             ])
             ->save();
 
@@ -560,13 +559,13 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->resizeBy([
                 'large' => [
-                    'width' => '200',
-                    'height' => 300
+                    'width'  => '200',
+                    'height' => 300,
                 ],
                 'small' => [
-                    'width' => 50,
-                    'height' => 20
-                ]
+                    'width'  => 50,
+                    'height' => 20,
+                ],
             ])
             ->save();
 
@@ -580,13 +579,13 @@ class ImageTest extends TestCase
             ->setImageFormat('png')
             ->resizeBy([
                 'large' => [
-                    'width' => '200',
-                    'height' => 300
+                    'width'  => '200',
+                    'height' => 300,
                 ],
                 'small' => [
-                    'width' => 50,
-                    'height' => 20
-                ]
+                    'width'  => 50,
+                    'height' => 20,
+                ],
             ])
             ->save();
 
@@ -643,7 +642,6 @@ class ImageTest extends TestCase
         $this->assertEquals('small', $image['default_size']);
 
         config(['image.default_size' => 'small']);
-
 
         $image = Image::make($this->image)
             ->setExclusiveDirectory('post')
@@ -712,9 +710,6 @@ class ImageTest extends TestCase
         $this->assertEquals('small', $image['default_size']);
     }
 
-    /**
-     *
-     */
     public function test_saves_and_removes_image_correctly()
     {
         $image = Image::make($this->image)
@@ -738,57 +733,55 @@ class ImageTest extends TestCase
 
         $image = Image::raw($this->image)
             ->in('')
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->save();
 
-        $this->assertFileExists(public_path($random . '.png'));
+        $this->assertFileExists(public_path($random.'.png'));
 
         Image::rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFalse(file_exists(public_path($random . '.png')));
+        $this->assertFalse(file_exists(public_path($random.'.png')));
 
         $random = $this->random();
 
         $image = Image::raw($this->image)
             ->in('test')
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->save();
 
-        $this->assertFileExists(public_path('test/' . $random . '.png'));
+        $this->assertFileExists(public_path('test/'.$random.'.png'));
 
         Image::disk('public')->rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFileDoesNotExist(public_path('test/' . $random . '.png'));
-
-
+        $this->assertFileDoesNotExist(public_path('test/'.$random.'.png'));
 
         $random = $this->random();
 
         $image = Image::raw($this->image)
             ->in('')
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->disk('storage')
             ->save();
 
-        $this->assertFileExists(storage_path('app/' . $random . '.png'));
+        $this->assertFileExists(storage_path('app/'.$random.'.png'));
 
         Image::disk('storage')->rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFileDoesNotExist(storage_path('app/test/' . $random . '.png'));
+        $this->assertFileDoesNotExist(storage_path('app/test/'.$random.'.png'));
 
         $random = $this->random();
 
         $image = Image::raw($this->image)
             ->in('test')
             ->disk('storage')
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->save();
 
-        $this->assertFileExists(storage_path('app/test/' . $random . '.png'));
+        $this->assertFileExists(storage_path('app/test/'.$random.'.png'));
 
         Image::disk('storage')->rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFileDoesNotExist(storage_path('app/test/' . $random . '.png'));
+        $this->assertFileDoesNotExist(storage_path('app/test/'.$random.'.png'));
     }
 
     public function test_rm_works_with_getted_menually_array()
@@ -851,17 +844,17 @@ class ImageTest extends TestCase
             ->setExclusiveDirectory('post')
             ->save(false, function ($image) {
                 return [
-                    'index' => $image->imagePath,
-                    'imageDirectory' => $image->imageDirectory
+                    'index'          => $image->imagePath,
+                    'imageDirectory' => $image->imageDirectory,
                 ];
             });
 
         $this->assertEquals(
-            config('image.root_directory') . DIRECTORY_SEPARATOR . 'post' . DIRECTORY_SEPARATOR . date('Y') . DIRECTORY_SEPARATOR . date('m') . DIRECTORY_SEPARATOR . date('d') . DIRECTORY_SEPARATOR . $this->random(false),
+            config('image.root_directory').DIRECTORY_SEPARATOR.'post'.DIRECTORY_SEPARATOR.date('Y').DIRECTORY_SEPARATOR.date('m').DIRECTORY_SEPARATOR.date('d').DIRECTORY_SEPARATOR.$this->random(false),
             $image['imageDirectory']
         );
 
-        foreach (config('image.' . config('image.use_size')) as $sizeName => $size) {
+        foreach (config('image.'.config('image.use_size')) as $sizeName => $size) {
             $this->assertArrayHasKey($sizeName, $image['index']);
         }
     }
@@ -901,7 +894,6 @@ class ImageTest extends TestCase
         foreach ($images as $image) {
             $this->assertFileExists(public_path($image));
         }
-
 
         $images = Image::make($this->image)
             ->setExclusiveDirectory('post')
@@ -972,7 +964,6 @@ class ImageTest extends TestCase
             $this->assertFileExists($this->disk_path($images['disk'], $image));
         }
 
-
         $image = Image::raw($this->image)
             ->disk('public')
             ->in('')
@@ -1010,7 +1001,7 @@ class ImageTest extends TestCase
             ->save();
 
         foreach ($images['index'] as $image) {
-            $this->assertFileExists(storage_path('app/' . $image));
+            $this->assertFileExists(storage_path('app/'.$image));
         }
 
         $images = Image::make($this->image)
@@ -1032,7 +1023,7 @@ class ImageTest extends TestCase
             });
 
         foreach ($images as $image) {
-            $this->assertFileExists(storage_path('app/' . $image));
+            $this->assertFileExists(storage_path('app/'.$image));
         }
 
         config(['image.disks.storage-public' => storage_path('public')]);
@@ -1046,9 +1037,8 @@ class ImageTest extends TestCase
             });
 
         foreach ($images as $image) {
-            $this->assertFileExists(storage_path('public/' . $image));
+            $this->assertFileExists(storage_path('public/'.$image));
         }
-
 
         $image = Image::raw($this->image)
             ->disk('public')
@@ -1068,7 +1058,7 @@ class ImageTest extends TestCase
                 return $image->imagePath;
             });
 
-        $this->assertFileExists(storage_path('app/' . $image));
+        $this->assertFileExists(storage_path('app/'.$image));
 
         $image = Image::raw($this->image)
             ->disk('storage-public')
@@ -1078,7 +1068,7 @@ class ImageTest extends TestCase
                 return $image->imagePath;
             });
 
-        $this->assertFileExists(storage_path('public/' . $image));
+        $this->assertFileExists(storage_path('public/'.$image));
     }
 
     public function test_rm_works_with_disks()
@@ -1119,7 +1109,7 @@ class ImageTest extends TestCase
             });
 
         foreach ($images as $image) {
-            $this->assertFileExists(storage_path('app/' . $image));
+            $this->assertFileExists(storage_path('app/'.$image));
         }
 
         $this->assertTrue(Image::disk('storage')->rm(['index' => $images], 'index'));
@@ -1136,7 +1126,7 @@ class ImageTest extends TestCase
             });
 
         foreach ($images as $image) {
-            $this->assertFileExists(storage_path('public/' . $image));
+            $this->assertFileExists(storage_path('public/'.$image));
         }
 
         $this->assertTrue(Image::disk('storage-public')->rm(['index' => $images], 'index'));
@@ -1174,7 +1164,7 @@ class ImageTest extends TestCase
                 return $image->imagePath;
             });
 
-        $this->assertFileExists(storage_path('app/' . $image));
+        $this->assertFileExists(storage_path('app/'.$image));
         $this->assertTrue(Image::disk('storage')->rm(['index' => $image], 'index'));
         $this->assertTrue(Image::wasRecentlyRemoved());
 
@@ -1186,7 +1176,7 @@ class ImageTest extends TestCase
                 return $image->imagePath;
             });
 
-        $this->assertFileExists(storage_path('public/' . $image));
+        $this->assertFileExists(storage_path('public/'.$image));
         $this->assertTrue(Image::disk('storage-public')->rm(['index' => $image], 'index'));
         $this->assertTrue(Image::wasRecentlyRemoved());
     }

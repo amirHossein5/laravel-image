@@ -8,11 +8,13 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class Image
 {
-    use Sizeable, Pathable, Removeable;
+    use Sizeable;
+    use Pathable;
+    use Removeable;
 
     /**
      * The hidden part of path which won't appear on result.
-     * 
+     *
      * @var string|null
      */
     private $hiddenPath = null;
@@ -44,7 +46,7 @@ class Image
         $this->hiddenPath = config("image.disks.{$disk}");
 
         if (!$this->hiddenPath) {
-            throw new InvalidParameterException('Undefined disk ' . $disk);
+            throw new InvalidParameterException('Undefined disk '.$disk);
         }
 
         $this->disk = $disk;
@@ -89,6 +91,7 @@ class Image
                 $resultArray = $this->getResultArrayStructure();
             }
             $this->reset();
+
             return $resultArray;
         }
 
@@ -100,14 +103,14 @@ class Image
 
         if (!$this->sizes) {
             $image->save($this->disk_path($this->imagePath));
-        } else if (count($this->sizes) === 1) {
+        } elseif (count($this->sizes) === 1) {
             foreach ($this->sizes as $key => $size) {
                 $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
                     !$upsize ?: $constraint->upsize();
                 });
                 $image->save($this->disk_path($this->imagePath));
             }
-        } else if (count($this->sizes) > 1) {
+        } elseif (count($this->sizes) > 1) {
             foreach ($this->sizes as $key => $size) {
                 $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
                     !$upsize ?: $constraint->upsize();
@@ -115,13 +118,14 @@ class Image
                 $image->save($this->disk_path($this->imagePath[$key]));
             }
         }
-        
+
         if ($closure instanceof \Closure) {
             $resultArray = $closure($this);
         } else {
             $resultArray = $this->getResultArrayStructure();
         }
         $this->reset();
+
         return $resultArray;
     }
 
@@ -135,7 +139,7 @@ class Image
         if (!$this->removeIfExists($this->imagePath)) {
             return false;
         }
-        
+
         return $this->save($upsize, $closure);
     }
 
@@ -150,7 +154,7 @@ class Image
 
     private function disk_path(string $path): string
     {
-        return $this->hiddenPath . DIRECTORY_SEPARATOR . $path; 
+        return $this->hiddenPath.DIRECTORY_SEPARATOR.$path;
     }
 
     private function reset(): void

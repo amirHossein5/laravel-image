@@ -4,8 +4,8 @@ namespace AmirHossein5\LaravelImage\Tests;
 
 use AmirHossein5\LaravelImage\ImageServiceProvider;
 use Illuminate\Http\UploadedFile;
-use Orchestra\Testbench\TestCase as TestbenchTestCase;
 use Illuminate\Support\Facades\File;
+use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
 class TestCase extends TestbenchTestCase
 {
@@ -13,7 +13,7 @@ class TestCase extends TestbenchTestCase
 
     protected function disk_path(string $disk, string $path): string
     {
-        return config('image.disks.' . $disk) . DIRECTORY_SEPARATOR . $path;
+        return config('image.disks.'.$disk).DIRECTORY_SEPARATOR.$path;
     }
 
     protected function getPackageProviders($app)
@@ -43,8 +43,9 @@ class TestCase extends TestbenchTestCase
     protected function random(bool $hasSuffix = true, string $suffix = null): string
     {
         if ($hasSuffix) {
-            $suffix = $suffix ? '_' . $suffix : '_' . rand(100, 999);
+            $suffix = $suffix ? '_'.$suffix : '_'.rand(100, 999);
         }
-        return time() . $suffix;
+
+        return time().$suffix;
     }
 }
