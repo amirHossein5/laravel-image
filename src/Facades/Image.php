@@ -27,7 +27,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static self alsoResize(int $width, int $height, string $as = null)
  * @method static self autoResize()
  **/
-
 class Image extends Facade
 {
     protected static function getFacadeAccessor()

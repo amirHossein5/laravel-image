@@ -21,42 +21,39 @@ return [
      * Disks of paths.
      */
     'disks' => [
-        'public' => public_path(),
-        'storage' => storage_path('app')
+        'public'  => public_path(),
+        'storage' => storage_path('app'),
     ],
 
     /**
      * The root directory of all of the images.
      * if you use "make" method you can modify it by "->setRootDirectory('directory name')" method.
      */
-
     'root_directory' => 'images',
 
     /**
      * Key of your sizes array, that you defined in below section, like default one.
      * By default the image sizes in "make" method will be create by this returned array.
      */
-
     'use_size' => 'imageSizes',
 
     /**
      * It's for making images with these sizes.
      * Add one of these to above section("use_size").
      */
-
     'imageSizes' => [
         'large' => [
-            'width' => '800',
-            'height' => '600'
+            'width'  => '800',
+            'height' => '600',
         ],
         'medium' => [
-            'width' => '400',
-            'height' => '300'
+            'width'  => '400',
+            'height' => '300',
         ],
         'small' => [
-            'width' => '80',
-            'height' => '60'
-        ]
+            'width'  => '80',
+            'height' => '60',
+        ],
     ],
 
     /**
@@ -73,8 +70,7 @@ return [
      *         ],
      *         'imageDirectory' => '. . .',
      *         'default_size' => 'medium'
-     *      ]
+     *      ].
      */
-
     'default_size' => null,
 ];

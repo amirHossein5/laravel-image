@@ -21,6 +21,7 @@ trait Sizeable
     {
         if (array_key_exists($sizeName, $image[$pathKeys])) {
             $image['default_size'] = $sizeName;
+
             return $image;
         }
 
@@ -43,6 +44,7 @@ trait Sizeable
         foreach ($sizes as $key => $size) {
             $this->sizes[$key] = ['width' => (int) $size['width'], 'height' => (int) $size['height']];
         }
+
         return $this;
     }
 
@@ -59,18 +61,19 @@ trait Sizeable
     public function autoResize(): self
     {
         $this->sizes = null;
+
         return $this;
     }
 
     private function setDefaultsForImageSizes(): void
     {
-        $this->resizeBy(config('image.' . config('image.use_size')));
+        $this->resizeBy(config('image.'.config('image.use_size')));
 
         if (config('image.default_size') === null) {
             $this->defaultSize = null;
-        } else if (!array_key_exists(config('image.default_size'), $this->sizes)) {
+        } elseif (!array_key_exists(config('image.default_size'), $this->sizes)) {
             throw new \ErrorException(
-                'Undefined size name "' . config('image.default_size') . '", that you defined in your config file.'
+                'Undefined size name "'.config('image.default_size').'", that you defined in your config file.'
             );
         }
 
