@@ -2,13 +2,14 @@
 
 namespace AmirHossein5\LaravelImage;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 
 trait Removeable
 {
     /**
-     * @var string|array
-     * @var string|int|null
+     * @var string|array $image
+     * @var string|integer|null $removeIndex
      */
     public function rm($image, $removeIndex = null): bool
     {
@@ -17,29 +18,26 @@ trait Removeable
         if (!$removeIndex) {
             if (is_string($image)) {
                 return $this->wasRecentlyRemoved = unlink($this->disk_path($image));
-            } elseif (is_string($image['index'])) {
+            } else if (is_string($image['index'])) {
                 return $this->wasRecentlyRemoved = unlink($this->disk_path($image['index']));
-            } elseif (is_array($image['index'])) {
-                return $this->wasRecentlyRemoved = File::deleteDirectory($this->disk_path($image['imageDirectory']));
+            } else if (is_array($image['index'])) {
+
+                $this->unsetImagePaths(array_values($image['index']));
+
+                $this->removeDirectoryIfEmpty($this->disk_path($image['imageDirectory']));
+
+                return $this->wasRecentlyRemoved;
             }
         }
 
         if (is_string($image[$removeIndex])) {
             return $this->wasRecentlyRemoved = unlink($this->disk_path($image[$removeIndex]));
-        } elseif (is_array($image[$removeIndex])) {
+        } else if (is_array($image[$removeIndex])) {
+
+            $this->unsetImagePaths(array_values($image[$removeIndex]));
+
             if (isset($image['imageDirectory'])) {
-                return $this->wasRecentlyRemoved = File::deleteDirectory($this->disk_path($image['imageDirectory']));
-            }
-
-            $paths = array_values($image[$removeIndex]);
-
-            for ($i = 0; $i < count($paths); $i++) {
-                if ($i === 0) {
-                    $this->wasRecentlyRemoved = unlink($this->disk_path($paths[$i]));
-                } else {
-                    $this->wasRecentlyRemoved =
-                        unlink($this->disk_path($paths[$i])) and $this->wasRecentlyRemoved;
-                }
+                $this->removeDirectoryIfEmpty($this->disk_path($image['imageDirectory']));
             }
 
             return $this->wasRecentlyRemoved;
@@ -49,9 +47,48 @@ trait Removeable
     }
 
     /**
+     * remove image paths.
+     */
+    private function unsetImagePaths(array $paths): void
+    {
+        try {
+            for ($i = 0; $i < count($paths); $i++) {
+                if ($i === 0) {
+                    $this->wasRecentlyRemoved = unlink($this->disk_path($paths[$i]));
+                } else {
+                    $this->wasRecentlyRemoved =
+                        unlink($this->disk_path($paths[$i])) and $this->wasRecentlyRemoved;
+                }
+            }
+        } catch (\Exception $th) {
+            $this->wasRecentlyRemoved = false;
+        }
+    }
+
+    /**
+     * removes given directory if it's empty.
+     */
+    private function removeDirectoryIfEmpty(string $dir): void
+    {
+        $FileSystem = new Filesystem();
+
+        // Check if the directory exists.
+        if ($FileSystem->exists($dir)) {
+
+            // Get all files in this directory.
+            $files = $FileSystem->files($dir);
+
+            // Check if directory is empty.
+            if (empty($files)) {
+                $FileSystem->deleteDirectory($dir);
+            }
+        }
+    }
+
+    /**
      * rm method returns false if not exists but this if exists removes.
      *
-     * @var string|array
+     * @var string|array $path
      */
     private function removeIfExists($path): bool
     {
@@ -63,7 +100,7 @@ trait Removeable
                     return false;
                 }
             }
-        } elseif (is_array($path)) {
+        } else if (is_array($path)) {
             foreach ($path as $item) {
                 if (file_exists($this->disk_path($item))) {
                     $this->rm($item);
@@ -80,7 +117,7 @@ trait Removeable
 
     private function setDisk(): void
     {
-        if (!$this->disk) {
+        if (! $this->disk) {
             $this->disk('public');
         }
     }
