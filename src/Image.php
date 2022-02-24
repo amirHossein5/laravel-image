@@ -41,7 +41,7 @@ class Image
 
     /**
      * Determines that image wasRecentlyRemoved.
-     * 
+     *
      * @return bool
      */
     public function wasRecentlyRemoved(): bool
@@ -51,8 +51,9 @@ class Image
 
     /**
      * Determines the disk.
-     * 
+     *
      * @param string $disk
+     *
      * @return self
      */
     public function disk(string $disk): self
@@ -70,8 +71,9 @@ class Image
 
     /**
      * Determines way of saving.
-     * 
+     *
      * @param \Illuminate\Http\UploadedFile $image
+     *
      * @return self
      */
     public function raw(UploadedFile $image): self
@@ -85,8 +87,9 @@ class Image
 
     /**
      * Determines way of saving.
-     * 
+     *
      * @param \Illuminate\Http\UploadedFile $image
+     *
      * @return self
      */
     public function make(UploadedFile $image): self
@@ -100,7 +103,7 @@ class Image
 
     /**
      * Determines is on testing env.
-     * 
+     *
      * @return void
      */
     public function fake(): void
@@ -110,9 +113,10 @@ class Image
 
     /**
      * Saves image.
-     * 
-     * @param bool $upsize
+     *
+     * @param bool          $upsize
      * @param \Closure|null $closure
+     *
      * @return mixed
      */
     public function save(bool $upsize = false, ?\Closure $closure = null)
@@ -166,9 +170,10 @@ class Image
 
     /**
      * Save and replaces image if exists with same name.
-     * 
-     * @param bool $upsize
+     *
+     * @param bool          $upsize
      * @param \Closure|null $closure
+     *
      * @return mixed
      */
     public function replace(bool $upsize = false, ?\Closure $closure = null)
@@ -184,8 +189,9 @@ class Image
 
     /**
      * Makes directory if not exists.
-     * 
+     *
      * @param string $path
+     *
      * @return bool
      */
     private function mkdirIfNotExists(string $path): bool
@@ -199,8 +205,9 @@ class Image
 
     /**
      * Sets disk path of image.
-     * 
+     *
      * @param string $path
+     *
      * @return string
      */
     private function disk_path(string $path): string
@@ -210,7 +217,7 @@ class Image
 
     /**
      * Resets properties of class.
-     * 
+     *
      * @return void
      */
     private function reset(): void

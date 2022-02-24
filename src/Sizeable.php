@@ -16,10 +16,11 @@ trait Sizeable
 
     /**
      * Sets default size for given image array.
-     * 
-     * @param array $image
-     * @param string $sizeName
+     *
+     * @param array       $image
+     * @param string      $sizeName
      * @param string|null $pathKeys
+     *
      * @return array|bool
      */
     public function setDefaultSizeFor(array $image, string $sizeName, ?string $pathKeys = 'index')
@@ -35,10 +36,11 @@ trait Sizeable
 
     /**
      * Removes previous defined sizes, and adds a size.
-     * 
-     * @param int $width
-     * @param int $height
+     *
+     * @param int    $width
+     * @param int    $height
      * @param string $as
+     *
      * @return self
      */
     public function resize(int $width, int $height, string $as = null): self
@@ -54,8 +56,9 @@ trait Sizeable
 
     /**
      * Resize by intended array.
-     * 
+     *
      * @param array $sizes
+     *
      * @return self
      */
     public function resizeBy(array $sizes): self
@@ -69,10 +72,11 @@ trait Sizeable
 
     /**
      * Adds a size.
-     * 
-     * @param int $width
-     * @param int $height
+     *
+     * @param int    $width
+     * @param int    $height
      * @param string $as
+     *
      * @return self
      */
     public function alsoResize(int $width, int $height, string $as = null): self
@@ -87,7 +91,7 @@ trait Sizeable
 
     /**
      * Removes previous defined sizes.
-     * 
+     *
      * @return self
      */
     public function autoResize(): self
@@ -99,7 +103,7 @@ trait Sizeable
 
     /**
      * Sets property related to size by config.
-     * 
+     *
      * @return void
      */
     private function setDefaultsForImageSizes(): void
