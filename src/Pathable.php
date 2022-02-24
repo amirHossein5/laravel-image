@@ -67,9 +67,10 @@ trait Pathable
     private $raw;
 
     /**
-     * Sets the path that image is going to be saved. 
-     * 
+     * Sets the path that image is going to be saved.
+     *
      * @param string $path
+     *
      * @return self
      */
     public function in(string $path): self
@@ -81,8 +82,9 @@ trait Pathable
 
     /**
      * Sets exclusive directory.
-     * 
+     *
      * @param string $directory
+     *
      * @return self
      */
     public function setExclusiveDirectory(string $directory): self
@@ -94,8 +96,9 @@ trait Pathable
 
     /**
      * Sets RootDirectory.
-     * 
+     *
      * @param string $directory
+     *
      * @return self
      */
     public function setRootDirectory(string $directory): self
@@ -107,8 +110,9 @@ trait Pathable
 
     /**
      * Sets ArchiveDirectories.
-     * 
+     *
      * @param string $directory
+     *
      * @return self
      */
     public function setArchiveDirectories(string $directories): self
@@ -120,8 +124,9 @@ trait Pathable
 
     /**
      * Sets SizesDirectory.
-     * 
+     *
      * @param string $directory
+     *
      * @return self
      */
     public function setSizesDirectory(string $directory): self
@@ -133,8 +138,9 @@ trait Pathable
 
     /**
      * Sets ImageName.
-     * 
+     *
      * @param string $name
+     *
      * @return self
      */
     public function setImageName(string $name): self
@@ -146,8 +152,9 @@ trait Pathable
 
     /**
      * Sets ImageFormat.
-     * 
+     *
      * @param string $format
+     *
      * @return self
      */
     public function setImageFormat(string $format): self
@@ -159,8 +166,9 @@ trait Pathable
 
     /**
      * Sets ImageName and ImageFormat.
-     * 
+     *
      * @param string $nameWithFormat
+     *
      * @return self
      */
     public function be(string $nameWithFormat): self
@@ -176,7 +184,7 @@ trait Pathable
 
     /**
      * Sets property defaults on make mode.
-     * 
+     *
      * @return void
      */
     private function setDefaultsForImagePath(): void
@@ -192,7 +200,7 @@ trait Pathable
 
     /**
      * Sets property defaults on raw mode.
-     * 
+     *
      * @return void
      */
     private function setRawDefaults(): void
@@ -206,7 +214,7 @@ trait Pathable
 
     /**
      * Sets image path property.
-     * 
+     *
      * @return void
      */
     private function setImagePath(): void
@@ -235,8 +243,9 @@ trait Pathable
 
     /**
      * Sets imagePath  and imageDirectory property by sizes.
-     * 
+     *
      * @param string $template
+     *
      * @return void
      */
     private function setImagePathAndDirectoryBySizes(string $template = ''): void
@@ -262,7 +271,7 @@ trait Pathable
 
     /**
      * Gets result array structure.
-     * 
+     *
      * @return array
      */
     private function getArrayStructure(): array
@@ -274,7 +283,7 @@ trait Pathable
 
     /**
      * Gets result array.
-     * 
+     *
      * @return array
      */
     private function getResultArrayStructure(): array
@@ -295,7 +304,7 @@ trait Pathable
 
     /**
      * Gets directories template.
-     * 
+     *
      * @return string
      */
     private function getDirectoriesTemplate(): string
@@ -305,7 +314,7 @@ trait Pathable
 
     /**
      * fixed directory separators.
-     * 
+     *
      * @return string|array
      */
     private function convertByDirectorySeparator($path)
@@ -325,9 +334,10 @@ trait Pathable
 
     /**
      * makes random number.
-     * 
-     * @param bool $hasSuffix
+     *
+     * @param bool   $hasSuffix
      * @param string $suffix
+     *
      * @return string
      */
     private function random(bool $hasSuffix = true, string $suffix = null): string
@@ -341,7 +351,7 @@ trait Pathable
 
     /**
      * cuts directory separators from related path properties.
-     * 
+     *
      * @return void
      */
     private function prepareVariables(): void

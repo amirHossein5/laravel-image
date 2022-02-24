@@ -3,15 +3,15 @@
 namespace AmirHossein5\LaravelImage;
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\File;
 
 trait Removeable
 {
     /**
      * Removes the image.
-     * 
-     * @param string|array $image
-     * @param string|integer|null $removeIndex
+     *
+     * @param string|array    $image
+     * @param string|int|null $removeIndex
+     *
      * @return bool
      */
     public function rm($image, $removeIndex = null): bool
@@ -21,10 +21,9 @@ trait Removeable
         if (!$removeIndex) {
             if (is_string($image)) {
                 return $this->wasRecentlyRemoved = unlink($this->disk_path($image));
-            } else if (is_string($image['index'])) {
+            } elseif (is_string($image['index'])) {
                 return $this->wasRecentlyRemoved = unlink($this->disk_path($image['index']));
-            } else if (is_array($image['index'])) {
-
+            } elseif (is_array($image['index'])) {
                 $this->unsetImagePaths(array_values($image['index']));
 
                 $this->removeDirectoryIfEmpty($this->disk_path($image['imageDirectory']));
@@ -35,8 +34,7 @@ trait Removeable
 
         if (is_string($image[$removeIndex])) {
             return $this->wasRecentlyRemoved = unlink($this->disk_path($image[$removeIndex]));
-        } else if (is_array($image[$removeIndex])) {
-
+        } elseif (is_array($image[$removeIndex])) {
             $this->unsetImagePaths(array_values($image[$removeIndex]));
 
             if (isset($image['imageDirectory'])) {
@@ -51,7 +49,7 @@ trait Removeable
 
     /**
      * remove the given image paths.
-     * 
+     *
      * @return void
      */
     private function unsetImagePaths(array $paths): void
@@ -72,8 +70,9 @@ trait Removeable
 
     /**
      * removes given directory if it's empty.
-     * 
+     *
      * @param string $dir
+     *
      * @return void
      */
     private function removeDirectoryIfEmpty(string $dir): void
@@ -97,6 +96,7 @@ trait Removeable
      * rm method returns false if not exists but this if exists removes.
      *
      * @param string|array $path
+     *
      * @return bool
      */
     private function removeIfExists($path): bool
@@ -109,7 +109,7 @@ trait Removeable
                     return false;
                 }
             }
-        } else if (is_array($path)) {
+        } elseif (is_array($path)) {
             foreach ($path as $item) {
                 if (file_exists($this->disk_path($item))) {
                     $this->rm($item);
@@ -126,12 +126,12 @@ trait Removeable
 
     /**
      * Sets disk for removing image.
-     * 
+     *
      * @return void
      */
     private function setDisk(): void
     {
-        if (! $this->disk) {
+        if (!$this->disk) {
             $this->disk('public');
         }
     }
