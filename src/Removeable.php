@@ -3,13 +3,12 @@
 namespace AmirHossein5\LaravelImage;
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\File;
 
 trait Removeable
 {
     /**
-     * @var string|array $image
-     * @var string|integer|null $removeIndex
+     * @var string|array
+     * @var string|int|null
      */
     public function rm($image, $removeIndex = null): bool
     {
@@ -18,10 +17,9 @@ trait Removeable
         if (!$removeIndex) {
             if (is_string($image)) {
                 return $this->wasRecentlyRemoved = unlink($this->disk_path($image));
-            } else if (is_string($image['index'])) {
+            } elseif (is_string($image['index'])) {
                 return $this->wasRecentlyRemoved = unlink($this->disk_path($image['index']));
-            } else if (is_array($image['index'])) {
-
+            } elseif (is_array($image['index'])) {
                 $this->unsetImagePaths(array_values($image['index']));
 
                 $this->removeDirectoryIfEmpty($this->disk_path($image['imageDirectory']));
@@ -32,8 +30,7 @@ trait Removeable
 
         if (is_string($image[$removeIndex])) {
             return $this->wasRecentlyRemoved = unlink($this->disk_path($image[$removeIndex]));
-        } else if (is_array($image[$removeIndex])) {
-
+        } elseif (is_array($image[$removeIndex])) {
             $this->unsetImagePaths(array_values($image[$removeIndex]));
 
             if (isset($image['imageDirectory'])) {
@@ -88,7 +85,7 @@ trait Removeable
     /**
      * rm method returns false if not exists but this if exists removes.
      *
-     * @var string|array $path
+     * @var string|array
      */
     private function removeIfExists($path): bool
     {
@@ -100,7 +97,7 @@ trait Removeable
                     return false;
                 }
             }
-        } else if (is_array($path)) {
+        } elseif (is_array($path)) {
             foreach ($path as $item) {
                 if (file_exists($this->disk_path($item))) {
                     $this->rm($item);
@@ -117,7 +114,7 @@ trait Removeable
 
     private function setDisk(): void
     {
-        if (! $this->disk) {
+        if (!$this->disk) {
             $this->disk('public');
         }
     }
