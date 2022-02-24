@@ -1213,23 +1213,23 @@ class ImageTest extends TestCase
 
         $FileSystem = new Filesystem();
 
-        $files = $FileSystem->files($image1['imageDirectory']);
+        $files = $FileSystem->files(public_path($image1['imageDirectory']));
 
-        $this->assertTrue($FileSystem->exists($image1['imageDirectory']));
+        $this->assertTrue($FileSystem->exists(public_path($image1['imageDirectory'])));
         $this->assertFalse(empty($files));
         $this->assertTrue(Image::wasRecentlyRemoved());
 
-        Image::rm($image1);
+        Image::rm($image2);
 
-        $files = $FileSystem->files($image1['imageDirectory']);
+        $files = $FileSystem->files(public_path($image2['imageDirectory']));
 
-        $this->assertTrue($FileSystem->exists($image1['imageDirectory']));
+        $this->assertTrue($FileSystem->exists($image2['imageDirectory']));
         $this->assertFalse(empty($files));
         $this->assertTrue(Image::wasRecentlyRemoved());
 
-        Image::rm($image1);
+        Image::rm($image3);
 
-        $this->assertFalse($FileSystem->exists($image1['imageDirectory']));
+        $this->assertFalse($FileSystem->exists(public_path($image3['imageDirectory'])));
         $this->assertTrue(Image::wasRecentlyRemoved());
     }
 }
