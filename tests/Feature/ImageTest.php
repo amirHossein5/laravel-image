@@ -1223,7 +1223,7 @@ class ImageTest extends TestCase
 
         $files = $FileSystem->files(public_path($image2['imageDirectory']));
 
-        $this->assertTrue($FileSystem->exists($image2['imageDirectory']));
+        $this->assertTrue($FileSystem->exists(public_path($image2['imageDirectory'])));
         $this->assertFalse(empty($files));
         $this->assertTrue(Image::wasRecentlyRemoved());
 
