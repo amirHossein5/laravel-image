@@ -15,6 +15,11 @@ trait Sizeable
     public $defaultSize = null;
 
     /**
+     * Sets default size for given image array.
+     * 
+     * @param array $image
+     * @param string $sizeName
+     * @param string|null $pathKeys
      * @return array|bool
      */
     public function setDefaultSizeFor(array $image, string $sizeName, ?string $pathKeys = 'index')
@@ -28,6 +33,14 @@ trait Sizeable
         return false;
     }
 
+    /**
+     * Removes previous defined sizes, and adds a size.
+     * 
+     * @param int $width
+     * @param int $height
+     * @param string $as
+     * @return self
+     */
     public function resize(int $width, int $height, string $as = null): self
     {
         $array = ['width' => $width, 'height' => $height];
@@ -39,6 +52,12 @@ trait Sizeable
         return $this;
     }
 
+    /**
+     * Resize by intended array.
+     * 
+     * @param array $sizes
+     * @return self
+     */
     public function resizeBy(array $sizes): self
     {
         foreach ($sizes as $key => $size) {
@@ -48,6 +67,14 @@ trait Sizeable
         return $this;
     }
 
+    /**
+     * Adds a size.
+     * 
+     * @param int $width
+     * @param int $height
+     * @param string $as
+     * @return self
+     */
     public function alsoResize(int $width, int $height, string $as = null): self
     {
         $array = ['width' => $width, 'height' => $height];
@@ -58,6 +85,11 @@ trait Sizeable
         return $this;
     }
 
+    /**
+     * Removes previous defined sizes.
+     * 
+     * @return self
+     */
     public function autoResize(): self
     {
         $this->sizes = null;
@@ -65,6 +97,11 @@ trait Sizeable
         return $this;
     }
 
+    /**
+     * Sets property related to size by config.
+     * 
+     * @return void
+     */
     private function setDefaultsForImageSizes(): void
     {
         $this->resizeBy(config('image.'.config('image.use_size')));

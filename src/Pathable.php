@@ -66,6 +66,12 @@ trait Pathable
      */
     private $raw;
 
+    /**
+     * Sets the path that image is going to be saved. 
+     * 
+     * @param string $path
+     * @return self
+     */
     public function in(string $path): self
     {
         $this->in = $path;
@@ -73,6 +79,12 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets exclusive directory.
+     * 
+     * @param string $directory
+     * @return self
+     */
     public function setExclusiveDirectory(string $directory): self
     {
         $this->exclusiveDirectory = $directory;
@@ -80,6 +92,12 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets RootDirectory.
+     * 
+     * @param string $directory
+     * @return self
+     */
     public function setRootDirectory(string $directory): self
     {
         $this->rootDirectory = $directory;
@@ -87,6 +105,12 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets ArchiveDirectories.
+     * 
+     * @param string $directory
+     * @return self
+     */
     public function setArchiveDirectories(string $directories): self
     {
         $this->archiveDirectories = $directories;
@@ -94,6 +118,12 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets SizesDirectory.
+     * 
+     * @param string $directory
+     * @return self
+     */
     public function setSizesDirectory(string $directory): self
     {
         $this->sizesDirectory = $directory;
@@ -101,6 +131,12 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets ImageName.
+     * 
+     * @param string $name
+     * @return self
+     */
     public function setImageName(string $name): self
     {
         $this->imageName = $name;
@@ -108,6 +144,12 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets ImageFormat.
+     * 
+     * @param string $format
+     * @return self
+     */
     public function setImageFormat(string $format): self
     {
         $this->imageFormat = $format;
@@ -115,6 +157,12 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets ImageName and ImageFormat.
+     * 
+     * @param string $nameWithFormat
+     * @return self
+     */
     public function be(string $nameWithFormat): self
     {
         $this->imageFormat = preg_replace('/[\w]+\./i', '', $nameWithFormat);
@@ -126,6 +174,11 @@ trait Pathable
         return $this;
     }
 
+    /**
+     * Sets property defaults on make mode.
+     * 
+     * @return void
+     */
     private function setDefaultsForImagePath(): void
     {
         $this->rootDirectory = config('image.root_directory');
@@ -137,6 +190,11 @@ trait Pathable
         $this->disk = 'public';
     }
 
+    /**
+     * Sets property defaults on raw mode.
+     * 
+     * @return void
+     */
     private function setRawDefaults(): void
     {
         $this->sizesDirectory = $this->random(false);
@@ -146,6 +204,11 @@ trait Pathable
         $this->disk = 'public';
     }
 
+    /**
+     * Sets image path property.
+     * 
+     * @return void
+     */
     private function setImagePath(): void
     {
         if ($this->raw) {
@@ -170,6 +233,12 @@ trait Pathable
         $this->setImagePathAndDirectoryBySizes($this->getDirectoriesTemplate());
     }
 
+    /**
+     * Sets imagePath  and imageDirectory property by sizes.
+     * 
+     * @param string $template
+     * @return void
+     */
     private function setImagePathAndDirectoryBySizes(string $template = ''): void
     {
         if (!$this->sizes) {
@@ -191,6 +260,11 @@ trait Pathable
         $this->imageDirectory = $this->convertByDirectorySeparator($imageDirectory);
     }
 
+    /**
+     * Gets result array structure.
+     * 
+     * @return array
+     */
     private function getArrayStructure(): array
     {
         $resultArrayStructure = ['index', 'imageDirectory', 'default_size', 'disk'];
@@ -198,6 +272,11 @@ trait Pathable
         return array_flip($resultArrayStructure);
     }
 
+    /**
+     * Gets result array.
+     * 
+     * @return array
+     */
     private function getResultArrayStructure(): array
     {
         $arrayStructure = $this->getArrayStructure();
@@ -214,11 +293,21 @@ trait Pathable
         return $arrayStructure;
     }
 
+    /**
+     * Gets directories template.
+     * 
+     * @return string
+     */
     private function getDirectoriesTemplate(): string
     {
         return "{$this->rootDirectory}/{$this->exclusiveDirectory}/{$this->archiveDirectories}";
     }
 
+    /**
+     * fixed directory separators.
+     * 
+     * @return string|array
+     */
     private function convertByDirectorySeparator($path)
     {
         if (is_string($path)) {
@@ -234,6 +323,13 @@ trait Pathable
         return $resultPath;
     }
 
+    /**
+     * makes random number.
+     * 
+     * @param bool $hasSuffix
+     * @param string $suffix
+     * @return string
+     */
     private function random(bool $hasSuffix = true, string $suffix = null): string
     {
         if ($hasSuffix) {
@@ -243,6 +339,11 @@ trait Pathable
         return time().$suffix;
     }
 
+    /**
+     * cuts directory separators from related path properties.
+     * 
+     * @return void
+     */
     private function prepareVariables(): void
     {
         if ($this->raw) {

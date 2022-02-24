@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\File;
 trait Removeable
 {
     /**
-     * @var string|array $image
-     * @var string|integer|null $removeIndex
+     * Removes the image.
+     * 
+     * @param string|array $image
+     * @param string|integer|null $removeIndex
+     * @return bool
      */
     public function rm($image, $removeIndex = null): bool
     {
@@ -47,7 +50,9 @@ trait Removeable
     }
 
     /**
-     * remove image paths.
+     * remove the given image paths.
+     * 
+     * @return void
      */
     private function unsetImagePaths(array $paths): void
     {
@@ -67,6 +72,9 @@ trait Removeable
 
     /**
      * removes given directory if it's empty.
+     * 
+     * @param string $dir
+     * @return void
      */
     private function removeDirectoryIfEmpty(string $dir): void
     {
@@ -88,7 +96,8 @@ trait Removeable
     /**
      * rm method returns false if not exists but this if exists removes.
      *
-     * @var string|array $path
+     * @param string|array $path
+     * @return bool
      */
     private function removeIfExists($path): bool
     {
@@ -115,6 +124,11 @@ trait Removeable
         return true;
     }
 
+    /**
+     * Sets disk for removing image.
+     * 
+     * @return void
+     */
     private function setDisk(): void
     {
         if (! $this->disk) {
