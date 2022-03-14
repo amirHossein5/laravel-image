@@ -16,6 +16,10 @@ jobs:
       fail-fast: true
       matrix:
         php: ['7.4', '8.0', '8.1']
+        laravel: [9.*, 8.*]
+        exclude:
+          - laravel: 9.*
+            php: 7.4
 
     steps:
       - name: Checkout code
@@ -35,7 +39,8 @@ jobs:
           timeout_minutes: 5
           max_attempts: 5
           command: composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
-      
+                   composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+                   
       - name: Create Database
         run: |
           mkdir -p database
@@ -53,6 +58,10 @@ jobs:
       fail-fast: true
       matrix:
         php: ['7.4', '8.0', '8.1']
+        laravel: [9.*, 8.*]
+        exclude:
+          - laravel: 9.*
+            php: 7.4
         
     runs-on: macos-latest
 
@@ -74,7 +83,8 @@ jobs:
           timeout_minutes: 5
           max_attempts: 5
           command: composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
-      
+                   composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+
       - name: Create Database
         run: |
           mkdir -p database
@@ -92,6 +102,10 @@ jobs:
       fail-fast: true
       matrix:
         php: ['7.4', '8.0', '8.1']
+        laravel: [9.*, 8.*]
+        exclude:
+          - laravel: 9.*
+            php: 7.4
 
     runs-on: windows-2019
 
@@ -113,7 +127,8 @@ jobs:
           timeout_minutes: 5
           max_attempts: 5
           command: composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
-      
+                   composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+
       - name: Create Database
         run: |
           mkdir -p database
