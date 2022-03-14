@@ -2,7 +2,7 @@
 
 namespace AmirHossein5\LaravelImage;
 
-use Facade\FlareClient\Http\Exceptions\MissingParameter;
+use LogicException;
 
 trait Pathable
 {
@@ -221,7 +221,7 @@ trait Pathable
     {
         if ($this->raw) {
             if ($this->in === null) {
-                throw new MissingParameter(
+                throw new LogicException(
                     'When you use "raw" method pass "$in" variable with "->in(place/of/created/image)".'
                 );
             }
@@ -232,7 +232,7 @@ trait Pathable
         }
 
         if ($this->exclusiveDirectory === null) {
-            throw new MissingParameter(
+            throw new LogicException(
                 'When you use "make" method pass "$setExclusiveDirectory" variable with "->setExclusiveDirectory(directory-name)".'
             );
         }

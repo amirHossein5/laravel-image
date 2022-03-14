@@ -4,8 +4,8 @@ namespace AmirHossein5\LaravelImage\Tests\Feature;
 
 use AmirHossein5\LaravelImage\Facades\Image;
 use AmirHossein5\LaravelImage\Tests\TestCase;
-use Facade\FlareClient\Http\Exceptions\MissingParameter;
 use Illuminate\Filesystem\Filesystem;
+use LogicException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class ImageTest extends TestCase
@@ -25,7 +25,7 @@ class ImageTest extends TestCase
     {
         Image::fake();
 
-        $this->expectException(MissingParameter::class);
+        $this->expectException(LogicException::class);
 
         Image::make($this->image)
             ->save();
@@ -35,7 +35,7 @@ class ImageTest extends TestCase
     {
         Image::fake();
 
-        $this->expectException(MissingParameter::class);
+        $this->expectException(LogicException::class);
 
         Image::raw($this->image)
             ->save();
