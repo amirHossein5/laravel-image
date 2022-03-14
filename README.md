@@ -20,8 +20,8 @@ It will save your image in three sizes, which were defined in config file, in pa
 
 ## Prerequisites
 
-- Laravel 8
-- PHP >= 7.4
+- Laravel ```^8.0|^9.0```
+- PHP ```^7.4|^8.0```
 
 ## Installation
 
