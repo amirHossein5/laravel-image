@@ -34,13 +34,9 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 5
-          max_attempts: 5
-          run: |
-            composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
-            composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+        run: |
+          composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
                    
       - name: Create Database
         run: |
@@ -79,13 +75,9 @@ jobs:
           coverage: none
           
       - name: Install dependencies
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 5
-          max_attempts: 5
-          run: |
-            composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
-            composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+        run: |
+          composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
 
       - name: Create Database
         run: |
@@ -124,13 +116,9 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 5
-          max_attempts: 5
-          run: |
-            composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
-            composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+        run: |
+          composer install -q --no-ansi --prefer-dist --no-interaction --no-progress
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
 
       - name: Create Database
         run: |
