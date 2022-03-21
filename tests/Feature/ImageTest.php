@@ -1241,7 +1241,7 @@ class ImageTest extends TestCase
             ->setExclusiveDirectory('post')
             ->autoResize()
             ->save();
-            
+
         Image::rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
         Image::rm($image);
@@ -1289,7 +1289,7 @@ class ImageTest extends TestCase
             ->save(false, function ($image) {
                 return $image->imagePath;
             });
-            
+
         Image::disk('storage')->rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
         Image::disk('storage')->rm($image);
