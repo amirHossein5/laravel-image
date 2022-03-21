@@ -20,9 +20,11 @@ trait Removeable
 
         if (!$removeIndex) {
             if (is_string($image)) {
-                return $this->wasRecentlyRemoved = unlink($this->disk_path($image));
+                $this->unlinkImagePath($image);
+                return $this->wasRecentlyRemoved;
             } elseif (is_string($image['index'])) {
-                return $this->wasRecentlyRemoved = unlink($this->disk_path($image['index']));
+                $this->unlinkImagePath($image['index']);
+                return $this->wasRecentlyRemoved;
             } elseif (is_array($image['index'])) {
                 $this->unsetImagePaths(array_values($image['index']));
 
@@ -33,7 +35,8 @@ trait Removeable
         }
 
         if (is_string($image[$removeIndex])) {
-            return $this->wasRecentlyRemoved = unlink($this->disk_path($image[$removeIndex]));
+            $this->unlinkImagePath($image[$removeIndex]);
+            return $this->wasRecentlyRemoved;
         } elseif (is_array($image[$removeIndex])) {
             $this->unsetImagePaths(array_values($image[$removeIndex]));
 
@@ -50,6 +53,7 @@ trait Removeable
     /**
      * remove the given image paths.
      *
+     * @param array $paths
      * @return void
      */
     private function unsetImagePaths(array $paths): void
@@ -63,6 +67,21 @@ trait Removeable
                         unlink($this->disk_path($paths[$i])) and $this->wasRecentlyRemoved;
                 }
             }
+        } catch (\Exception $th) {
+            $this->wasRecentlyRemoved = false;
+        }
+    }
+
+    /**
+     * remove the given image path.
+     *
+     * @param string $path
+     * @return void
+     */
+    private function unlinkImagePath(string $path): void
+    {
+        try {
+            $this->wasRecentlyRemoved = unlink($this->disk_path($path));
         } catch (\Exception $th) {
             $this->wasRecentlyRemoved = false;
         }
