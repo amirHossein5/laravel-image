@@ -278,6 +278,16 @@ class ImageTest extends TestCase
 
         $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name.png', $image['index']);
         $this->assertEquals('post', $image['imageDirectory']);
+
+        $image = Image::raw($this->image)
+            ->in('post')
+            ->setSizesDirectory('size')
+            ->resizeBy(config('image.imageSizes'))
+            ->be('name.png')
+            ->save();
+
+        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'size' . DIRECTORY_SEPARATOR . 'name_large.png', $image['index']['large']);
+        $this->assertEquals('post' . DIRECTORY_SEPARATOR . 'size', $image['imageDirectory']);
     }
 
     public function test_with_make_method_and_default_sizes_sets_correct_imagePath_and_imageDirectory()
