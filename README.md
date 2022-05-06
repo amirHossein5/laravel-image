@@ -78,7 +78,7 @@ And finally you may specify your sizes in configuration:
  
 ## "make" method
 
-In ```make``` method defaults for directories and sizes will be set. Beacause of this, when you use:
+In ```make``` method defaults for directories(archive path(2021/12/2)) and sizes will be set. Beacause of this, when you use:
 
 ```php
 use AmirHossein5\LaravelImage\Facades\Image;
@@ -97,7 +97,7 @@ saves in:
     - ```1638611107_960_small.png```
 
 
-It will create your image in some default path, and with those sizes, that you defined in config (in ```use_size``` part). 
+It will create your image in archive path(2021/12/2), and with those sizes, that you defined in config (in ```use_size``` part). 
 But how to customize directories, and sizes.
 
 For size customazations see [Size customazations](#size-customazations).
@@ -119,6 +119,7 @@ Image path setters:
 | setImageName( string )          | time()_rand(100, 999)_sizeName(if there be any size) |
 | setImageFormat( string )        | uploaded image format.  e.g, ```->setImageFormat('png')``` |
 | be( string )                    | sets both image name and format. e.g, ```->be('name.png')```| 
+| setSizesDirectory( string )     | time()                                               |
 
 Just available for ```make```:
 
@@ -127,7 +128,7 @@ Just available for ```make```:
 | setRootDirectory( string )      | images (written in config file)                      |
 | setExclusiveDirectory( string ) |                                                      |
 | setArchiveDirectories( string ) | year/month/day                                       |
-| setSizesDirectory( string )     | time()                                               |
+
 
 > Notice: root directory is also changeable in config file.
 
@@ -150,7 +151,7 @@ For size customazations see [Size customazations](#size-customazations).
 
 When you are using "raw" method,
 
-nothing will be automatically set(directories, and sizes). For setting directory of image there is two method:
+nothing will be automatically set(archive path(2021/12/2), and sizes). For setting directory of image:
 
 ```php
 Image::raw($image)
@@ -204,9 +205,6 @@ You may add more disks and use from that.
 
 ## Size customazations
 
-You can add your own array of sizes in config file (in ```use_size``` part). 
-Then whenever you use "make" method (or adding sizes array with ```->resizeBy()```) it will automatically create images with specified sizes.
-
 Size setters:
 
 | setter                                    | description                                                                         |
@@ -216,14 +214,12 @@ Size setters:
 | alsoResize( $width, $height, $as = null ) | adds a size                                                                         |
 | resizeBy( array )                         | resize by intended array(the structure shuold be like 'imageSizes' in configuration)|
 
-You may define multiple array of size in config file, and ```->resizeBy(config('image.postSizes'))```.
+> For automatically resizing use ```make``` method and define sizes in config file (in ```use_size``` part).
 
 
 ### Default size
 
-If you want to use default_size functionality, you may define it in config file.
-
-Or create, update default_size:
+If you want to use default_size functionality, you may define it in config file, or after image was created:
 
 ```php
 Image::setDefaultSizeFor($post->image, 'small');
@@ -231,6 +227,7 @@ Image::setDefaultSizeFor($post->image, 'small');
 
 Will return previous array but default_size has changed or added.
 
+<!-- 
 If you created your result array **manually** pass the key of array, which there is image path(s):
 
 ```php
@@ -246,13 +243,13 @@ $image = Image::make($this->image)
 ```php
 Image::setDefaultSizeFor($post->image, 'small', 'paths');
 ```
-
+ -->
 
 
 
 ## Result array
 
-After creating image it returns array, which
+After creating image if operation was successful, it returns array, which
 
 ```index``` key is array,or string(contains one, or more) image paths, which depends on number of sizes.
 
@@ -269,10 +266,13 @@ For example:
    "index" => "image path"
    
    "imageDirectory" =>  "images/post/2021/12/08/1638966454"
-   "default_size" => 'medium' (if you are using "default_size", and you have more than one size)
+   "default_size" => 'medium' 
    "disk" => 'public'
 ]
 ```
+> ```default_size``` key when you are using "default_size", and there are **more than one size**, will be.
+
+
 
 ### Getting result array manually
 
@@ -286,19 +286,12 @@ Image::make($this->image)
       'imageDirectory' => $image->imageDirectory,
       'disk' => $image->disk,
     ];
-  })
-  
-  // or 
-  
-  ->save(closure: fn ($image) => [
-    'index' => $image->imagePath,
-    'imageDirectory' => $image->imageDirectory,
-    'disk' => $image->disk,
-  ]);
-  
-  
-  // output
-  
+  });
+```
+
+output:
+
+``` 
 [
   "index" => [
       "images/post/2021/12/08/1638966454/1638966454_491_large.png",
@@ -309,10 +302,11 @@ Image::make($this->image)
    "index" => "images/post/2021/12/08/1638966454/"
    
    "imageDirectory" => "images/post/2021/12/08/1638966454"
-    "disk" => 'public'
+   "disk" => 'public'
 ]
-
 ```
+  
+
 
 Properties:
 
@@ -368,7 +362,7 @@ Image::rm($image, 'paths');
 or if it's one string path just pass it:
 
 ```php
-Image::raw($this->image)
+$image = Image::raw($this->image)
   ->in('post/test')
   ->save(false, function ($image) {
     return $image->imagePath;
@@ -408,7 +402,7 @@ Image::disk('storage')->rm($image);
 
 
 
-## Replaceing image(s)
+## Replacing image(s)
 
 ```replace``` method works same as ```save``` method, but if there be image(s) with same name as this image, this will be replace.
 
@@ -416,14 +410,7 @@ Image::disk('storage')->rm($image);
 $image = Image::raw($this->image)
     ->in('')
     ->be('logo.png')
-    ->replace();
- 
-// like save method
-
-if (! $image) {
-  // ...
-}    
-
+    ->replace(); 
 ```
 
 It works for multipe images too.
