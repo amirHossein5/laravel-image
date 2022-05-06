@@ -78,7 +78,7 @@ class Image
      *
      * @return self
      */
-    public function raw(UploadedFile|InterventionImage $image): self
+    public function raw($image): self
     {
         $this->raw = true;
         $this->image = Intervention::make($image);
@@ -94,7 +94,7 @@ class Image
      *
      * @return self
      */
-    public function make(UploadedFile|InterventionImage $image): self
+    public function make($image): self
     {
         $this->image = Intervention::make($image);
         $this->setDefaultsForImagePath();
@@ -200,7 +200,7 @@ class Image
      * 
      * @return void
      */
-    private function store(InterventionImage $image, ?array $sizes, array|string $imagePath, bool $upsize): void
+    private function store(InterventionImage $image, ?array $sizes, $imagePath, bool $upsize): void
     {
         if (!$sizes) {
             $image->save($this->disk_path($imagePath));

@@ -3,9 +3,11 @@ Create image with multiple sizes based on [intervention](http://image.interventi
 *for Example:*
 
 ```php
-  Image::make($request->image)
-    ->setExclusiveDirectory('post')
-    ->save();
+use AmirHossein5\LaravelImage\Facades\Image;
+
+Image::make($request->image)
+  ->setExclusiveDirectory('post')
+  ->save();
 ```
 
 It will save your image in three sizes, which were defined in config file, in path:
@@ -117,6 +119,8 @@ Just available for ```make```:
 Example: 
 
 ```php 
+use AmirHossein5\LaravelImage\Facades\Image;
+
 Image::make($image)
   ->setExclusiveDirectory('book')
   ->setRootDirectory('image')
@@ -136,6 +140,8 @@ When you are using "raw" method,
 nothing will be automatically set(archive path(2021/12/2), and sizes). For setting directory of image:
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 Image::raw($image) // or pass Intervention object
   ->in('book')
   ->save()
@@ -167,6 +173,8 @@ For saving into storage folder you can use disks, which defined in config:
 By default it's ```public```.
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $images = Image::make($image)
   ->setExclusiveDirectory('post')
   ->disk('storage')
@@ -204,6 +212,8 @@ Size setters:
 If you want to use default_size functionality, you may define it in config file, or after image was created:
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 Image::setDefaultSizeFor($post->image, 'small');
 ```
 
@@ -213,6 +223,8 @@ Will return previous array but default_size has changed or added.
 If you created your result array **manually** pass the key of array, which there is image path(s):
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $image = Image::make($this->image)
   ->setExclusiveDirectory('post')
   ->save(false, function ($image) {
@@ -223,6 +235,8 @@ $image = Image::make($this->image)
 ```
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 Image::setDefaultSizeFor($post->image, 'small', 'paths');
 ```
  -->
@@ -259,6 +273,7 @@ For example:
 ### Getting result array manually
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
 
 Image::make($this->image)
   ->setExclusiveDirectory('post')
@@ -321,6 +336,8 @@ If you want to use upsize of intervention you should:
 Pass created image:
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 Image::rm($post->image);
 ```
 which returns ```true``` or ```false```.
@@ -330,6 +347,7 @@ which returns ```true``` or ```false```.
 If you created your result array **manually** pass the key of array, which there is image path(s):
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
 
 $image = Image::make($this->image)
   ->setExclusiveDirectory('post')
@@ -344,6 +362,8 @@ Image::rm($image, 'paths');
 or if it's one string path just pass it:
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $image = Image::raw($this->image)
   ->in('post/test')
   ->save(false, function ($image) {
@@ -356,6 +376,7 @@ Image::rm($image);
 to check that is removed, or not:
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
 
 if (! Image::rm($image)) {
   // ...
@@ -374,6 +395,8 @@ if (! Image::wasRecentlyRemoved()) {
 If you created image with some disks do:
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 ....
   ->disk('storage')
 ....
@@ -389,6 +412,8 @@ Image::disk('storage')->rm($image);
 ```replace``` method works same as ```save``` method, but if there be image(s) with same name as this image, this will be replace.
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $image = Image::raw($this->image)
     ->in('')
     ->be('logo.png')
@@ -447,6 +472,8 @@ Image::commit();
 If you don't want to image be ceate use fake before your code:
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 Image::fake();
 
 Image:: ...
@@ -456,6 +483,8 @@ Image:: ...
 ## Examples
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $request['image'] = Image::make($request['image'])
   ->setExclusiveDirectory('post')
   ->save();
@@ -470,6 +499,8 @@ Post::create($request);
 ```
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 if(!Image::rm($post->image)){
   return back()->with('fail message');
 }
@@ -478,6 +509,8 @@ $post->delete;
 ```
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $image = Image::setDefaultSizeFor($post->image, $request['default_size']);
 
 if (!$image) {
@@ -492,6 +525,8 @@ $post->save();
 
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $request['icon'] = Image::raw($request['icon'])
     ->be('icon.png')
     ->in('')
@@ -507,6 +542,8 @@ if (!$request['icon']) {
 ```
 
 ```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
 $img = Intervention::make('https://avatars.githubusercontent.com/u/68776630?s=40&v=4');
 
 $avatar = Image::raw($img)
