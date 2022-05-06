@@ -6,6 +6,7 @@ use AmirHossein5\LaravelImage\ImageServiceProvider;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
+use Intervention\Image\Facades\Image as Intervention;
 
 class TestCase extends TestbenchTestCase
 {
@@ -47,5 +48,29 @@ class TestCase extends TestbenchTestCase
         }
 
         return time().$suffix;
+    }
+
+    public function interventionCircle(): \Intervention\Image\Image
+    {
+        // create empty canvas with background color
+        $img = Intervention::canvas(300, 200, '#ddd');
+
+        // draw a filled blue circle
+        $img->circle(100, 50, 50, function ($draw) {
+            $draw->background('#0000ff');
+        });
+
+        // draw a filled blue circle with red border
+        $img->circle(10, 100, 100, function ($draw) {
+            $draw->background('#0000ff');
+            $draw->border(1, '#f00');
+        });
+
+        // draw an empty circle with 5px border
+        $img->circle(70, 150, 100, function ($draw) {
+            $draw->border(5, '000000');
+        });
+
+        return $img;
     }
 }

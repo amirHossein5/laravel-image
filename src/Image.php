@@ -5,6 +5,7 @@ namespace AmirHossein5\LaravelImage;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Facades\Image as Intervention;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Intervention\Image\Image as InterventionImage;
 
 class Image
 {
@@ -25,7 +26,7 @@ class Image
     public $disk = null;
 
     /**
-     * @var Illuminate\Http\UploadedFile
+     * @var Intervention\Image\Image
      */
     public $image;
 
@@ -70,31 +71,31 @@ class Image
     }
 
     /**
-     * Determines way of saving.
+     * Determines way of saving. $image can be UploadedFile laravel object or intervention. 
      *
-     * @param \Illuminate\Http\UploadedFile $image
+     * @param \Illuminate\Http\UploadedFile|Intervention\Image\Image $image
      *
      * @return self
      */
-    public function raw(UploadedFile $image): self
+    public function raw(UploadedFile|InterventionImage $image): self
     {
         $this->raw = true;
-        $this->image = $image;
+        $this->image = Intervention::make($image);
         $this->setRawDefaults();
-
+        
         return $this;
     }
 
     /**
-     * Determines way of saving.
+     * Determines way of saving. $image can be UploadedFile laravel object or intervention. 
      *
-     * @param \Illuminate\Http\UploadedFile $image
+     * @param \Illuminate\Http\UploadedFile|Intervention\Image\Image $image
      *
      * @return self
      */
-    public function make(UploadedFile $image): self
+    public function make(UploadedFile|InterventionImage $image): self
     {
-        $this->image = $image;
+        $this->image = Intervention::make($image);
         $this->setDefaultsForImagePath();
         $this->setDefaultsForImageSizes();
 

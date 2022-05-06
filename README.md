@@ -57,24 +57,6 @@ And finally you may specify your sizes in configuration:
 ``` 
 
 
-
-
-<!-- - **["make" method](#make-method)**
-  - **[Directory customazations](#directory-customazations)**
-  
-- **["raw" method](#raw-method)**
-    
-- **[Size customazations](#size-customazations)**
-  - **[Default size](#default-size)**
-  
-- **[result array](#result-array)** 
-
-- **[Upsize or not](#upsize-or-not)**
-
-- **[Remove image(s)](#remove-images)**
-  
-- **[Examples](#examples)**
- -->
  
 ## "make" method
 
@@ -83,7 +65,7 @@ In ```make``` method defaults for directories and sizes will be set. Beacause of
 ```php
 use AmirHossein5\LaravelImage\Facades\Image;
 
-Image::make($request->image)
+Image::make($request->image) // or pass Intervention object
   ->setExclusiveDirectory('post')
   ->save();
 ```
@@ -153,7 +135,7 @@ When you are using "raw" method,
 nothing will be automatically set(directories, and sizes). For setting directory of image there is two method:
 
 ```php
-Image::raw($image)
+Image::raw($image) // or pass Intervention object
   ->in('book')
   ->save()
   
@@ -493,6 +475,13 @@ if (!$request['icon']) {
 }
 ```
 
+```php
+$img = Intervention::make('https://avatars.githubusercontent.com/u/68776630?s=40&v=4');
+
+$avatar = Image::raw($img)
+    ->in('avatar')
+    ->save();
+```
 
 <br/>
 

@@ -7,9 +7,42 @@ use AmirHossein5\LaravelImage\Tests\TestCase;
 use Illuminate\Filesystem\Filesystem;
 use LogicException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Intervention\Image\Facades\Image as Intervention;
 
 class ImageTest extends TestCase
 {
+    public function test_raw_method_creates_image_that_defined_with_intervention()
+    {
+        $img = $this->interventionCircle();
+
+        $image = Image::raw($img)
+            ->in('circle')
+            ->save();
+
+        $this->assertTrue(file_exists(public_path($image['index'])));
+
+        $img = Intervention::make('https://avatars.githubusercontent.com/u/68776630?s=40&v=4');
+
+        $image = Image::raw($img)
+            ->in('avatar')
+            ->save();
+
+        $this->assertTrue(file_exists(public_path($image['index'])));
+    }
+
+    public function test_make_method_creates_image_that_defined_with_intervention()
+    {
+        $img = $this->interventionCircle();
+
+        $image = Image::make($img)
+            ->setExclusiveDirectory('circle')
+            ->save();
+
+        foreach ($image['index'] as $path) {
+            $this->assertTrue(file_exists(public_path($path)));       
+        }
+    }
+
     public function test_when_fake_method_uses_wont_create_image()
     {
         Image::fake();

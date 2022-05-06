@@ -192,7 +192,7 @@ trait Pathable
         $this->rootDirectory = config('image.root_directory');
         $this->archiveDirectories = $this->convertByDirectorySeparator(date('Y').'/'.date('m').'/'.date('d'));
         $this->sizesDirectory = $this->random(false);
-        $this->imageFormat = $this->image->getClientOriginalExtension();
+        $this->imageFormat = preg_replace('/image\//', '', $this->image->mime() ?? 'image/png');
         $this->imageName = $this->random();
         $this->hiddenPath = config('image.disks.public');
         $this->disk = 'public';
@@ -206,7 +206,7 @@ trait Pathable
     private function setRawDefaults(): void
     {
         $this->sizesDirectory = $this->random(false);
-        $this->imageFormat = $this->image->getClientOriginalExtension();
+        $this->imageFormat = preg_replace('/image\//', '',$this->image->mime() ?? 'image/png');
         $this->imageName = $this->random();
         $this->hiddenPath = config('image.disks.public');
         $this->disk = 'public';
