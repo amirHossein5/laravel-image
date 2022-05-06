@@ -117,8 +117,8 @@ Image path setters:
 | setter                          | default                                              |
 |---------------------------------|------------------------------------------------------|
 | setImageName( string )          | time()_rand(100, 999)_sizeName(if there be any size) |
-| setImageFormat( string )        | uploaded image format                                |
-| be( string )                    | sets both image name and format. e.g, ```->be('name.png)```| 
+| setImageFormat( string )        | uploaded image format.  e.g, ```->setImageFormat('png')``` |
+| be( string )                    | sets both image name and format. e.g, ```->be('name.png')```| 
 
 Just available for ```make```:
 
