@@ -52,6 +52,12 @@ class ImageTest extends TestCase
             ->save();
 
         $this->assertFalse(file_exists(public_path($image['index'])));
+
+        $image = Image::raw($this->image)
+            ->in('post')
+            ->save();
+
+        $this->assertFalse(file_exists(public_path($image['index'])));
     }
 
     public function test_make_method_needs_exclusive_directory()
@@ -1385,5 +1391,265 @@ class ImageTest extends TestCase
         $this->assertTrue(Image::wasRecentlyRemoved());
         Image::disk('storage')->rm($image, 'test');
         $this->assertFalse(Image::wasRecentlyRemoved());
+    }
+
+    /**
+     * Transaction tests.
+     */
+    public function test_max_attempt_zero_throws_exception()
+    {
+        $this->expectException(LogicException::class);
+        Image::transaction(function () {}, 0);
+    }
+
+    public function test_transaction_method_when_throws_exception_works()
+    {
+        $manuallImage = $image1 = $image2 = null;
+        
+        try {
+            
+            Image::transaction(function () use (&$manuallImage, &$image1, &$image2, &$image3) {
+
+                $manuallImage = Image::make($this->image)
+                    ->setExclusiveDirectory('post')
+                    ->save(false, function ($image) {
+                        return [
+                            'index'          => $image->imagePath,
+                            'imageDirectory' => $image->imageDirectory,
+                        ];
+                    });
+
+                $image1 = Image::make($this->image)
+                    ->setExclusiveDirectory('post')
+                    ->disk('storage')
+                    ->save();
+
+                $image2 = Image::raw($this->image)
+                    ->disk('public')
+                    ->in('')
+                    ->save(false, function ($image) {
+                        return $image->imagePath;
+                    });
+
+                Image::raw($this->image)
+                    ->disk('false')
+                    ->save();
+            });
+        } catch (\Throwable $e) {
+            foreach ($manuallImage['index'] as $image) {
+                $this->assertFileDoesNotExist(public_path($image));
+            }
+
+            foreach ($image1['index'] as $image) {
+                $this->assertFileDoesNotExist(storage_path('app/' . $image));
+            }
+
+            $this->assertFileDoesNotExist(public_path($image2));
+            
+            return;
+        }
+
+        throw new \Exception('transaction did not throw the exception.');
+    }
+
+    public function test_transaction_manually_when_throws_exception_works()
+    {
+        Image::beginTransaction();
+
+        $manuallImage = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->save(false, function ($image) {
+                return [
+                    'index'          => $image->imagePath,
+                    'imageDirectory' => $image->imageDirectory,
+                ];
+            });
+
+        $image1 = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->disk('storage')
+            ->save();
+
+        $image2 = Image::raw($this->image)
+            ->disk('public')
+            ->in('')
+            ->save(false, function ($image) {
+                return $image->imagePath;
+            });
+
+        try {
+            Image::raw($this->image)->save();
+
+            Image::commit();
+        } catch (\Throwable $e) {
+            Image::rollBack();
+        }
+
+        foreach ($manuallImage['index'] as $image) {
+            $this->assertFileDoesNotExist(public_path($image));
+        }
+
+        foreach ($image1['index'] as $image) {
+            $this->assertFileDoesNotExist(storage_path('app/' . $image));
+        }
+
+        $this->assertFileDoesNotExist(public_path($image2));
+
+    }
+
+    public function test_transaction_method_when_not_throws_exception_works()
+    {
+        $manuallImage = $image1 = $image2 = null;
+
+        Image::transaction(function () use (&$manuallImage, &$image1, &$image2) {
+
+            $manuallImage = Image::make($this->image)
+                ->setExclusiveDirectory('post')
+                ->save(false, function ($image) {
+                    return [
+                        'index'          => $image->imagePath,
+                        'imageDirectory' => $image->imageDirectory,
+                    ];
+                });
+
+            $image1 = Image::make($this->image)
+                ->setExclusiveDirectory('post')
+                ->disk('storage')
+                ->save();
+
+            $image2 = Image::raw($this->image)
+                ->disk('public')
+                ->in('')
+                ->save(false, function ($image) {
+                    return $image->imagePath;
+                });
+        });
+
+        foreach ($manuallImage['index'] as $image) {
+            $this->assertFileExists(public_path($image));
+        }
+
+        foreach ($image1['index'] as $image) {
+            $this->assertFileExists(storage_path('app/' . $image));
+        }
+
+        $this->assertFileExists(public_path($image2));
+
+    }
+
+    public function test_transaction_manually_when_not_throws_exception_works()
+    {
+        Image::beginTransaction();
+
+        $manuallImage = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->save(false, function ($image) {
+                return [
+                    'index'          => $image->imagePath,
+                    'imageDirectory' => $image->imageDirectory,
+                ];
+            });
+
+        $image1 = Image::make($this->image)
+            ->setExclusiveDirectory('post')
+            ->disk('storage')
+            ->save();
+
+        $image2 = Image::raw($this->image)
+            ->disk('public')
+            ->in('')
+            ->be('logo.png')
+            ->save(false, function ($image) {
+                return $image->imagePath;
+            });
+
+        $image3 = Image::raw($this->image)
+            ->disk('storage')
+            ->in('')
+            ->be('logo.png')
+            ->save(false, function ($image) {
+                return $image->imagePath;
+            });
+
+        Image::commit();
+
+        foreach ($manuallImage['index'] as $image) {
+            $this->assertFileExists(public_path($image));
+        }
+
+        foreach ($image1['index'] as $image) {
+            $this->assertFileExists(storage_path('app/' . $image));
+        }
+
+        $this->assertFileExists(public_path($image2));
+
+        $this->assertFileExists(storage_path('app/' . $image3));
+    }
+
+    public function test_manually_transaction_when_commit_and_rollback_methods_are_next_to_each_other()
+    {
+        Image::beginTransaction();
+
+        $image = Image::raw($this->image)
+            ->in('post')
+            ->save(false, function ($image) {
+                return $image->imagePath;
+            });
+
+        // first method will work (commit)
+        Image::commit();
+        Image::rollBack();
+
+        $this->assertFileExists(public_path($image));
+
+
+
+        Image::beginTransaction();
+
+        $image = Image::raw($this->image)
+            ->in('post')
+            ->save(false, function ($image) {
+                return $image->imagePath;
+            });
+
+        // first method will work (rollback)
+        Image::rollBack();
+        Image::commit();
+
+        $this->assertFileDoesNotExist(public_path($image));
+    }
+
+    public function test_throwable_transaction_wont_create_folder_of_image()
+    {
+        $image = null;
+
+        Image::beginTransaction();
+
+        $image = Image::raw($this->image)
+            ->disk('storage')
+            ->in('transaction')
+            ->save();
+
+        try {
+            Image::raw();
+            Image::commit();
+        } catch (\Throwable $e) {
+            Image::rollBack();
+        }
+
+        $this->assertDirectoryDoesNotExist(storage_path('app/' . $image['imageDirectory']));
+
+        try {
+            Image::transaction(function () use (&$image) {
+                $image = Image::raw($this->image)
+                    ->disk('storage')
+                    ->in('transaction')
+                    ->save();
+
+                Image::raw();
+            });
+        } catch (\Throwable $e) {
+            $this->assertDirectoryDoesNotExist(storage_path('app/' . $image['imageDirectory']));
+        }
     }
 }

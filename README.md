@@ -410,6 +410,50 @@ if (! $image) {
 
 It works for multipe images too.
 
+## Transactions
+
+If an exception is thrown within the transaction closure, the transaction will automatically be rolled back and the exception is re-thrown. If the closure executes successfully, the transaction will automatically be committed.
+
+```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
+Image::transaction(function () {
+  Image::raw($image)->in('')->save();
+});
+```
+
+### Max Attempts
+The ```transaction``` method accepts an optional second argument which defines the number of times a transaction should be retried when a deadlock occurs.
+
+```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
+Image::transaction(function () {
+  Image::raw($image)->in('')->save();
+}, maxAttempts: 4);
+```
+
+### Manually Using Transactions
+
+For begin transaction manually:
+```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
+Image::beginTransaction();
+```
+You can rollback the transaction via the ```rollBack``` method:
+```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
+Image::rollBack();
+```
+Lastly, you can commit a transaction via the ```commit``` method:
+```php
+use AmirHossein5\LaravelImage\Facades\Image;
+
+Image::commit();
+```
+
 
 ## Testing
 

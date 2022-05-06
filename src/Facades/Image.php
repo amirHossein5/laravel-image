@@ -26,6 +26,11 @@ use Illuminate\Support\Facades\Facade;
  * @method static self resizeBy(array $sizes)
  * @method static self alsoResize(int $width, int $height, string $as = null)
  * @method static self autoResize()
+ * @method static void transaction(\Closure $callback, int $maxAttempts = 1)
+ * @method static void rollBack()
+ * @method static void commit()
+ * @method static void beginTransaction();
+ * 
  **/
 class Image extends Facade
 {

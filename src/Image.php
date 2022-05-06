@@ -12,6 +12,7 @@ class Image
     use Sizeable;
     use Pathable;
     use Removeable;
+    use Transaction;
 
     /**
      * The hidden part of path which won't appear on result.
@@ -135,28 +136,28 @@ class Image
             return $resultArray;
         }
 
-        if (!$this->mkdirIfNotExists($this->imageDirectory)) {
-            return false;
-        }
-
-        $image = Intervention::make($this->image);
-
-        if (!$this->sizes) {
-            $image->save($this->disk_path($this->imagePath));
-        } elseif (count($this->sizes) === 1) {
-            foreach ($this->sizes as $key => $size) {
-                $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
-                    !$upsize ?: $constraint->upsize();
-                });
-                $image->save($this->disk_path($this->imagePath));
+        // saving image
+        if ($this->transactioning) {
+            $this->transactionBag[] = [
+                'image' => $this->image,
+                'sizes' => $this->sizes,
+                'imagePath' => $this->imagePath,
+                'imageDirectory' => $this->imageDirectory,
+                'upsize' => $upsize,
+                'disk' => $this->disk,
+            ];
+        } else {
+            if (!$this->mkdirIfNotExists($this->imageDirectory)) {
+                return false;
             }
-        } elseif (count($this->sizes) > 1) {
-            foreach ($this->sizes as $key => $size) {
-                $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
-                    !$upsize ?: $constraint->upsize();
-                });
-                $image->save($this->disk_path($this->imagePath[$key]));
-            }
+
+            $this->store(
+                $this->image, 
+                $this->sizes, 
+                $this->imagePath, 
+                $this->imageDirectory, 
+                $upsize
+            );
         }
 
         if ($closure instanceof \Closure) {
@@ -164,6 +165,7 @@ class Image
         } else {
             $resultArray = $this->getResultArrayStructure();
         }
+
         $this->reset();
 
         return $resultArray;
@@ -186,6 +188,37 @@ class Image
         }
 
         return $this->save($upsize, $closure);
+    }
+
+    /**
+     * Stores image(s).
+     * 
+     * @param Intervention\Image\Image $image
+     * @param null|array $sizes
+     * @param array|string $imagePath
+     * @param bool $upsize
+     * 
+     * @return void
+     */
+    private function store(InterventionImage $image, ?array $sizes, array|string $imagePath, bool $upsize): void
+    {
+        if (!$sizes) {
+            $image->save($this->disk_path($imagePath));
+        } elseif (count($sizes) === 1) {
+            foreach ($sizes as $key => $size) {
+                $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
+                    !$upsize ?: $constraint->upsize();
+                });
+                $image->save($this->disk_path($imagePath));
+            }
+        } elseif (count($sizes) > 1) {
+            foreach ($sizes as $key => $size) {
+                $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
+                    !$upsize ?: $constraint->upsize();
+                });
+                $image->save($this->disk_path($imagePath[$key]));
+            }
+        }
     }
 
     /**
@@ -223,8 +256,15 @@ class Image
      */
     private function reset(): void
     {
+        $whitelist = [
+            'testMode', 
+            'wasRecentlyRemoved',
+            'transactioning',
+            'transactionBag',
+        ];
+
         foreach (get_class_vars(get_class($this)) as $var => $def_val) {
-            if ($var !== 'testMode' and $var !== 'wasRecentlyRemoved') {
+            if (!in_array($var, $whitelist)) {
                 $this->$var = $def_val;
             }
         }
