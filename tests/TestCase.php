@@ -5,8 +5,8 @@ namespace AmirHossein5\LaravelImage\Tests;
 use AmirHossein5\LaravelImage\ImageServiceProvider;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
-use Orchestra\Testbench\TestCase as TestbenchTestCase;
 use Intervention\Image\Facades\Image as Intervention;
+use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
 class TestCase extends TestbenchTestCase
 {

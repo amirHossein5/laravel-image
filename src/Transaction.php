@@ -2,39 +2,37 @@
 
 namespace AmirHossein5\LaravelImage;
 
-use AmirHossein5\LaravelImage\Facades\Image;
-
 trait Transaction
 {
     /**
      * Whether on transaction or not.
-     * 
+     *
      * @var bool
      */
     protected bool $transactioning = false;
 
     /**
      * Array of saved images.
-     * 
+     *
      * @var array
      */
     protected array $transactionBag = [];
 
     /**
      * Transaction function.
-     * 
+     *
      * @param \Closure $closure
-     * @param int $attempts = 1
-     * 
-     * @return void
-     * 
+     * @param int      $attempts = 1
+     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function transaction(\Closure $callback, int $maxAttempts = 1): void
     {
         if ($maxAttempts <= 0) {
             throw new \LogicException('max attempts should be more than 0');
-        } 
+        }
 
         for ($currentAttempt = 1; $currentAttempt <= $maxAttempts; $currentAttempt++) {
             $this->beginTransaction();
@@ -56,7 +54,7 @@ trait Transaction
                     $currentAttempt,
                     $maxAttempts
                 );
-                
+
                 continue;
             }
         }
@@ -64,7 +62,7 @@ trait Transaction
 
     /**
      * Starts the transaction.
-     * 
+     *
      * @return void
      */
     public function beginTransaction(): void
@@ -74,7 +72,7 @@ trait Transaction
 
     /**
      * Commits the transaction.
-     * 
+     *
      * @return void
      */
     public function commit(): void
@@ -82,7 +80,7 @@ trait Transaction
         if ($this->transactioning === false) {
             return;
         }
-        
+
         foreach ($this->transactionBag as $transactioned) {
             $this->disk($transactioned['disk']);
             $this->mkdirIfNotExists($transactioned['imageDirectory']);
@@ -101,7 +99,7 @@ trait Transaction
 
     /**
      * RollBacks the transaction.
-     * 
+     *
      * @return void
      */
     public function rollBack(): void
@@ -115,20 +113,21 @@ trait Transaction
     }
 
     /**
-     * Handles the exception
-     * 
+     * Handles the exception.
+     *
      * @param \Throwable $e
-     * @param int $currentAttempts = 1
-     * @param int $maxAttempts = 1
-     * 
-     * @return void
-     * 
+     * @param int        $currentAttempts = 1
+     * @param int        $maxAttempts     = 1
+     *
      * @throws \Throwable
+     *
+     * @return void
      */
     private function handleTransactionException(\Throwable $e, int $currentAttempt = 1, int $maxAttempts = 1): void
     {
         if ($currentAttempt >= $maxAttempts) {
             $this->rollBack();
+
             throw $e;
         }
     }

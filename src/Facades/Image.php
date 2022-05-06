@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void rollBack()
  * @method static void commit()
  * @method static void beginTransaction();
- * 
+ *
  **/
 class Image extends Facade
 {

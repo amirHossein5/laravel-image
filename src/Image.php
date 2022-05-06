@@ -4,8 +4,8 @@ namespace AmirHossein5\LaravelImage;
 
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Facades\Image as Intervention;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Intervention\Image\Image as InterventionImage;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class Image
 {
@@ -72,7 +72,7 @@ class Image
     }
 
     /**
-     * Determines way of saving. $image can be UploadedFile laravel object or intervention. 
+     * Determines way of saving. $image can be UploadedFile laravel object or intervention.
      *
      * @param \Illuminate\Http\UploadedFile|Intervention\Image\Image $image
      *
@@ -83,12 +83,12 @@ class Image
         $this->raw = true;
         $this->image = Intervention::make($image);
         $this->setRawDefaults();
-        
+
         return $this;
     }
 
     /**
-     * Determines way of saving. $image can be UploadedFile laravel object or intervention. 
+     * Determines way of saving. $image can be UploadedFile laravel object or intervention.
      *
      * @param \Illuminate\Http\UploadedFile|Intervention\Image\Image $image
      *
@@ -139,12 +139,12 @@ class Image
         // saving image
         if ($this->transactioning) {
             $this->transactionBag[] = [
-                'image' => $this->image,
-                'sizes' => $this->sizes,
-                'imagePath' => $this->imagePath,
+                'image'          => $this->image,
+                'sizes'          => $this->sizes,
+                'imagePath'      => $this->imagePath,
                 'imageDirectory' => $this->imageDirectory,
-                'upsize' => $upsize,
-                'disk' => $this->disk,
+                'upsize'         => $upsize,
+                'disk'           => $this->disk,
             ];
         } else {
             if (!$this->mkdirIfNotExists($this->imageDirectory)) {
@@ -152,10 +152,10 @@ class Image
             }
 
             $this->store(
-                $this->image, 
-                $this->sizes, 
-                $this->imagePath, 
-                $this->imageDirectory, 
+                $this->image,
+                $this->sizes,
+                $this->imagePath,
+                $this->imageDirectory,
                 $upsize
             );
         }
@@ -192,12 +192,12 @@ class Image
 
     /**
      * Stores image(s).
-     * 
+     *
      * @param Intervention\Image\Image $image
-     * @param null|array $sizes
-     * @param array|string $imagePath
-     * @param bool $upsize
-     * 
+     * @param null|array               $sizes
+     * @param array|string             $imagePath
+     * @param bool                     $upsize
+     *
      * @return void
      */
     private function store(InterventionImage $image, ?array $sizes, array|string $imagePath, bool $upsize): void
@@ -257,7 +257,7 @@ class Image
     private function reset(): void
     {
         $whitelist = [
-            'testMode', 
+            'testMode',
             'wasRecentlyRemoved',
             'transactioning',
             'transactionBag',

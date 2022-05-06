@@ -206,7 +206,7 @@ trait Pathable
     private function setRawDefaults(): void
     {
         $this->sizesDirectory = $this->random(false);
-        $this->imageFormat = preg_replace('/image\//', '',$this->image->mime() ?? 'image/png');
+        $this->imageFormat = preg_replace('/image\//', '', $this->image->mime() ?? 'image/png');
         $this->imageName = $this->random();
         $this->hiddenPath = config('image.disks.public');
         $this->disk = 'public';
