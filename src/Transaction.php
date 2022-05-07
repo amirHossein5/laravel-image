@@ -87,6 +87,10 @@ trait Transaction
             $this->disk($transactioned['disk']);
             $this->mkdirIfNotExists($transactioned['imageDirectory']);
 
+            if ($transactioned['willBeReplace']) {
+                $this->removeIfExists($transactioned['imagePath']);
+            }
+
             $this->store(
                 $transactioned['image'],
                 $transactioned['sizes'],

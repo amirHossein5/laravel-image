@@ -24,7 +24,6 @@ class ImageTest extends TestCase
     /**
      * Tests for directory and size setters.
      */
-
     public function test_make_method_and_directory_setters_set_directories_correctly()
     {
         Image::fake();
