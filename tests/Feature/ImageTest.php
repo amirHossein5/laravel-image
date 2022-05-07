@@ -248,7 +248,7 @@ class ImageTest extends TestCase
 
         $image = Image::raw($this->image)
             ->in('post')
-            ->be('name.png.png')
+            ->be('not-delete.png')
             ->save();
 
         $this->assertEquals('post'.DIRECTORY_SEPARATOR.'name.png.png', $image['index']);

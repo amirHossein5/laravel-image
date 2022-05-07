@@ -23,6 +23,8 @@ class TransactionTest extends TestCase
     {
         $image1 = $image2 = null;
 
+        Image::raw($this->image)->in('')->be('not-delete.png')->save();
+
         try {
             Image::transaction(function () use (&$image1, &$image2) {
 
@@ -38,6 +40,7 @@ class TransactionTest extends TestCase
 
                 $image2 = Image::raw($this->image)
                     ->in('')
+                    ->be('not-delete.png')
                     ->replace(false, function ($image) {
                         return $image->imagePath;
                     });
@@ -52,7 +55,9 @@ class TransactionTest extends TestCase
                 $this->assertFileDoesNotExist(storage_path('app/' . $image));
             }
 
-            $this->assertFileDoesNotExist(public_path($image2));
+            // $this->assertFileDoesNotExist(public_path($image2));
+
+            $this->assertFileExists(public_path('not-delete.png'));
 
             return;
         }

@@ -42,6 +42,13 @@ class Image
     private bool $wasRecentlyRemoved = false;
 
     /**
+     * On Transactioning it shows the image is going to be replave.
+     * 
+     * @var bool
+     */
+    private bool $willBeReplace = false;
+
+    /**
      * Determines that image wasRecentlyRemoved.
      *
      * @return bool
@@ -145,6 +152,7 @@ class Image
                 'imageDirectory' => $this->imageDirectory,
                 'upsize' => $upsize,
                 'disk' => $this->disk,
+                'willBeReplace' => $this->willBeReplace,
             ];
         } else {
             if (!$this->mkdirIfNotExists($this->imageDirectory)) {
@@ -183,8 +191,12 @@ class Image
     {
         $this->setImagePath();
 
-        if (!$this->removeIfExists($this->imagePath)) {
-            return false;
+        if ($this->transactioning) {
+            $this->willBeReplace = true;
+        } else {
+            if (!$this->removeIfExists($this->imagePath)) {
+                return false;
+            }
         }
 
         return $this->save($upsize, $closure);

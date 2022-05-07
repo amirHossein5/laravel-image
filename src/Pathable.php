@@ -173,11 +173,14 @@ trait Pathable
      */
     public function be(string $nameWithFormat): self
     {
-        $this->imageFormat = preg_replace('/[\w]+\./i', '', $nameWithFormat);
+        $nameWithFormat = explode('.', $nameWithFormat);
 
-        preg_match_all('/[\w]+\./i', $nameWithFormat, $name);
+        $this->imageFormat = array_slice($nameWithFormat, -1)[0];
 
-        $this->imageName = trim(implode('', $name[0]), '.');
+        $name = $nameWithFormat;
+        array_pop($name);
+        
+        $this->imageName = trim(implode('.', $name), '.');
 
         return $this;
     }
