@@ -57,7 +57,7 @@ trait Pathable
      *
      * @var string
      */
-    public $in;
+    public $in = '';
 
     /**
      * Is creating image in normal mode or raw mode.

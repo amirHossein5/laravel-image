@@ -65,7 +65,7 @@ class TransactionTest extends TestCase
         Image::beginTransaction();
 
         $image1 = Image::make($this->image)
-            ->setExclusiveDirectory('post')
+            ->setExclusiveDirectory(time())
             ->disk('storage')
             ->save(false, function ($image) {
                 return [
@@ -81,7 +81,7 @@ class TransactionTest extends TestCase
             });
 
         try {
-            Image::raw($this->image)->save();
+            Image::raw($this->image)->disk('wrong')->save();
 
             Image::commit();
         } catch (\Throwable $e) {
