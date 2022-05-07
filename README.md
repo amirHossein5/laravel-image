@@ -67,7 +67,7 @@ In ```make``` method defaults for directories(archive path(2021/12/2)) and sizes
 ```php
 use AmirHossein5\LaravelImage\Facades\Image;
 
-Image::make($request->image) // or pass Intervention object
+Image::make($request->image) // or pass **Intervention object**
   ->setExclusiveDirectory('post')
   ->save();
 ```
@@ -142,16 +142,14 @@ nothing will be automatically set(archive path(2021/12/2), and sizes). For setti
 ```php
 use AmirHossein5\LaravelImage\Facades\Image;
 
-Image::raw($image) // or pass Intervention object
+Image::raw($image) // or pass **Intervention object**
   ->in('book')
   ->save()
   
 // without resizing
 // will be save in public/book/ 
 
-Image::raw($image)
-  ->in('')
-  ->save()
+Image::raw($image)->save()
   
 // without resizing
 // will be save in public/
@@ -311,7 +309,7 @@ Properties:
 |----------------------------|-----------------------------------------------------------|
 | $image->image              |    Uploaded image object.                                 |
 | $image->sizes              | All used sizes.                                           |
-| $image->default_size       | Default size.                                             |
+| $image->defaultSize        | Default size.                                             |
 | $image->imagePath          | Full path of stored image(s).                             |
 | $image->imageDirectory     | Image's directory.                                        |
 | $image->imageName          | Image name.                                               |
@@ -359,7 +357,7 @@ Image::rm($image, 'paths');
 
 ```
 
-or if it's one string path just pass it:
+Or if it's one string path just pass it:
 
 ```php
 use AmirHossein5\LaravelImage\Facades\Image;
@@ -381,13 +379,14 @@ use AmirHossein5\LaravelImage\Facades\Image;
 if (! Image::rm($image)) {
   // ...
 }
+```
 
-// or 
+```php
+use AmirHossein5\LaravelImage\Facades\Image;
 
 if (! Image::wasRecentlyRemoved()) {
   // ...
 }
-
 ```
 
 #### Remove when used disk

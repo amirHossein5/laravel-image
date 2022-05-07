@@ -25,9 +25,13 @@ trait Sizeable
      */
     public function setDefaultSizeFor(array $image, string $sizeName, ?string $pathKeys = 'index')
     {
-        if (array_key_exists($sizeName, $image[$pathKeys]) or $pathKeys == 'index') {
+        if ($pathKeys != 'index') {
+            if (array_key_exists($sizeName, $image[$pathKeys])) {
+                $image['default_size'] = $sizeName;
+                return $image;
+            }
+        } else {
             $image['default_size'] = $sizeName;
-
             return $image;
         }
 

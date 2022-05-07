@@ -73,4 +73,18 @@ class TestCase extends TestbenchTestCase
 
         return $img;
     }
+
+    /**
+     * Re modifies string by directory separator.
+     * 
+     * @param string $string
+     * 
+     * @return string
+     */
+    public function directorySeparator(string $string): string
+    {
+        $string = str_replace('/', DIRECTORY_SEPARATOR, $string);
+
+        return str_replace('\\', DIRECTORY_SEPARATOR, $string);
+    }
 }

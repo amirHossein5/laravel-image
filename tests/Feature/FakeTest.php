@@ -15,15 +15,15 @@ class FakeTest extends TestCase
     {
         Image::fake();
 
-        $image = Image::raw($this->image)
-            ->save();
+        $image = Image::raw($this->image)->save();
+        $this->assertFalse(file_exists(public_path($image['index'])));
 
+        $image = Image::raw($this->image)->replace();
         $this->assertFalse(file_exists(public_path($image['index'])));
 
         $image = Image::make($this->image)
             ->setExclusiveDirectory('post')
             ->save();
-            
         foreach ($image['index'] as $image) {
             $this->assertFalse(file_exists(public_path($image)));
         }

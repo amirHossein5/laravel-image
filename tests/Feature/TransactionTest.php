@@ -31,6 +31,7 @@ class TransactionTest extends TestCase
                 $image1 = Image::make($this->image)
                     ->setExclusiveDirectory('post')
                     ->disk('storage')
+                    ->setSizesDirectory('not-create')
                     ->save(false, function ($image) {
                         return [
                             'index'          => $image->imagePath,
@@ -45,7 +46,7 @@ class TransactionTest extends TestCase
                         return $image->imagePath;
                     });
 
-                Image::raw($this->image)->save();
+                Image::raw($this->image)->disk()->save();
             });
         } catch (\Throwable $e) {
 
