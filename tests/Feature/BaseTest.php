@@ -240,6 +240,7 @@ class BaseTest extends TestCase
                     'exclusiveDirectory' => $image->exclusiveDirectory,
                     'archiveDirectories' => $image->archiveDirectories,
                     'sizesDirectory' => $image->sizesDirectory,
+                    'quality' => $image->quality,
                 ];
             });
 
@@ -260,6 +261,7 @@ class BaseTest extends TestCase
                     'exclusiveDirectory' => $image->exclusiveDirectory,
                     'archiveDirectories' => $image->archiveDirectories,
                     'sizesDirectory' => $image->sizesDirectory,
+                    'quality' => $image->quality,
                 ];
             });
 
@@ -282,6 +284,7 @@ class BaseTest extends TestCase
                     'exclusiveDirectory' => $image->exclusiveDirectory,
                     'archiveDirectories' => $image->archiveDirectories,
                     'sizesDirectory' => $image->sizesDirectory,
+                    'quality' => $image->quality,
                 ];
             });
 
@@ -294,10 +297,11 @@ class BaseTest extends TestCase
      * @param array $image
      * @param array $sizes
      * @param bool $isRaw
+     * @param int $quality
      *  
      * @return void
      */
-    private function propertiesAreValid(array $image, array $sizes = [], bool $isRaw = false): void
+    private function propertiesAreValid(array $image, array $sizes = [], bool $isRaw = false, int $quality = 90): void
     {
         $this->assertEquals(get_class($image['image']), \Intervention\Image\Image::class);
         if ($sizes) {
@@ -337,5 +341,6 @@ class BaseTest extends TestCase
             );
         } 
         $this->assertEquals($this->random(false), $image['sizesDirectory']);
+        $this->assertEquals($quality, $image['quality']);
     }
 }

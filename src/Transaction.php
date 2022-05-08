@@ -95,7 +95,8 @@ trait Transaction
                 $transactioned['image'],
                 $transactioned['sizes'],
                 $transactioned['imagePath'],
-                $transactioned['upsize']
+                $transactioned['upsize'],
+                $transactioned['quality'],
             );
         }
 

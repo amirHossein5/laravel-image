@@ -15,6 +15,13 @@ class Image
     use Transaction;
 
     /**
+     * Image quality.
+     * 
+     * @var int
+     */
+    public int $quality = 90;
+
+    /**
      * The hidden part of path which won't appear on result.
      *
      * @var string|null
@@ -70,7 +77,7 @@ class Image
         $this->hiddenPath = config("image.disks.{$disk}");
 
         if (!$this->hiddenPath) {
-            throw new InvalidParameterException('Undefined disk '.$disk);
+            throw new InvalidParameterException('Undefined disk ' . $disk);
         }
 
         $this->disk = $disk;
@@ -90,7 +97,7 @@ class Image
         $this->raw = true;
         $this->image = Intervention::make($image);
         $this->setRawDefaults();
-        
+
         return $this;
     }
 
@@ -118,6 +125,18 @@ class Image
     public function fake(): void
     {
         $this->testMode = true;
+    }
+
+    /**
+     * Sets image quality.
+     *
+     * @param int $quality
+     * 
+     * @return void
+     */
+    public function quality(int $quality): void
+    {
+        $this->quality = $quality;
     }
 
     /**
@@ -153,6 +172,7 @@ class Image
                 'upsize' => $upsize,
                 'disk' => $this->disk,
                 'willBeReplace' => $this->willBeReplace,
+                'quality' => $this->quality,
             ];
         } else {
             if (!$this->mkdirIfNotExists($this->imageDirectory)) {
@@ -160,11 +180,11 @@ class Image
             }
 
             $this->store(
-                $this->image, 
-                $this->sizes, 
-                $this->imagePath, 
-                $this->imageDirectory, 
-                $upsize
+                $this->image,
+                $this->sizes,
+                $this->imagePath,
+                $upsize,
+                $this->quality
             );
         }
 
@@ -209,10 +229,11 @@ class Image
      * @param null|array $sizes
      * @param array|string $imagePath
      * @param bool $upsize
+     * @param int $quality
      * 
      * @return void
      */
-    private function store(InterventionImage $image, ?array $sizes, $imagePath, bool $upsize): void
+    private function store(InterventionImage $image, ?array $sizes, $imagePath, bool $upsize, int $quality): void
     {
         if (!$sizes) {
             $image->save($this->disk_path($imagePath));
@@ -258,7 +279,7 @@ class Image
      */
     private function disk_path(string $path): string
     {
-        return $this->hiddenPath.DIRECTORY_SEPARATOR.$path;
+        return $this->hiddenPath . DIRECTORY_SEPARATOR . $path;
     }
 
     /**
@@ -269,7 +290,7 @@ class Image
     private function reset(): void
     {
         $whitelist = [
-            'testMode', 
+            'testMode',
             'wasRecentlyRemoved',
             'transactioning',
             'transactionBag',
