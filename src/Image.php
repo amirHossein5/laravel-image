@@ -4,8 +4,8 @@ namespace AmirHossein5\LaravelImage;
 
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Facades\Image as Intervention;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Intervention\Image\Image as InterventionImage;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class Image
 {
@@ -16,7 +16,7 @@ class Image
 
     /**
      * Image quality.
-     * 
+     *
      * @var int
      */
     public int $quality = 90;
@@ -50,7 +50,7 @@ class Image
 
     /**
      * On Transactioning it shows the image is going to be replave.
-     * 
+     *
      * @var bool
      */
     private bool $willBeReplace = false;
@@ -77,7 +77,7 @@ class Image
         $this->hiddenPath = config("image.disks.{$disk}");
 
         if (!$this->hiddenPath) {
-            throw new InvalidParameterException('Undefined disk ' . $disk);
+            throw new InvalidParameterException('Undefined disk '.$disk);
         }
 
         $this->disk = $disk;
@@ -86,7 +86,7 @@ class Image
     }
 
     /**
-     * Determines way of saving. $image can be UploadedFile laravel object or intervention. 
+     * Determines way of saving. $image can be UploadedFile laravel object or intervention.
      *
      * @param \Illuminate\Http\UploadedFile|Intervention\Image\Image $image
      *
@@ -102,7 +102,7 @@ class Image
     }
 
     /**
-     * Determines way of saving. $image can be UploadedFile laravel object or intervention. 
+     * Determines way of saving. $image can be UploadedFile laravel object or intervention.
      *
      * @param \Illuminate\Http\UploadedFile|Intervention\Image\Image $image
      *
@@ -131,7 +131,7 @@ class Image
      * Sets image quality.
      *
      * @param int $quality
-     * 
+     *
      * @return self
      */
     public function quality(int $quality): self
@@ -167,14 +167,14 @@ class Image
         // saving image
         if ($this->transactioning) {
             $this->transactionBag[] = [
-                'image' => $this->image,
-                'sizes' => $this->sizes,
-                'imagePath' => $this->imagePath,
+                'image'          => $this->image,
+                'sizes'          => $this->sizes,
+                'imagePath'      => $this->imagePath,
                 'imageDirectory' => $this->imageDirectory,
-                'upsize' => $upsize,
-                'disk' => $this->disk,
-                'willBeReplace' => $this->willBeReplace,
-                'quality' => $this->quality,
+                'upsize'         => $upsize,
+                'disk'           => $this->disk,
+                'willBeReplace'  => $this->willBeReplace,
+                'quality'        => $this->quality,
             ];
         } else {
             if (!$this->mkdirIfNotExists($this->imageDirectory)) {
@@ -226,13 +226,13 @@ class Image
 
     /**
      * Stores image(s).
-     * 
+     *
      * @param Intervention\Image\Image $image
-     * @param null|array $sizes
-     * @param array|string $imagePath
-     * @param bool $upsize
-     * @param int $quality
-     * 
+     * @param null|array               $sizes
+     * @param array|string             $imagePath
+     * @param bool                     $upsize
+     * @param int                      $quality
+     *
      * @return void
      */
     private function store(InterventionImage $image, ?array $sizes, $imagePath, bool $upsize, int $quality): void
@@ -281,7 +281,7 @@ class Image
      */
     private function disk_path(string $path): string
     {
-        return $this->hiddenPath . DIRECTORY_SEPARATOR . $path;
+        return $this->hiddenPath.DIRECTORY_SEPARATOR.$path;
     }
 
     /**
