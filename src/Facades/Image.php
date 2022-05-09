@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void commit()
  * @method static void beginTransaction()
  * @method static self quality(int $quality)
- * 
+ *
  **/
 class Image extends Facade
 {

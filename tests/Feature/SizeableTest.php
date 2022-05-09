@@ -90,10 +90,10 @@ class SizeableTest extends TestCase
             ->setImageFormat('png')
             ->resize(50, 20)
             ->alsoResize(100, 50, 'large')
-            ->alsoResize(100, 50,)
+            ->alsoResize(100, 50)
             ->save();
 
-        $expectedPath = $this->directorySeparator('images/post/arch/' . $random);
+        $expectedPath = $this->directorySeparator('images/post/arch/'.$random);
         $this->assertEquals($expectedPath, $image['imageDirectory']);
         $this->assertTrue(array_key_exists(0, $image['index']));
         $this->assertTrue(array_key_exists('large', $image['index']));
@@ -101,7 +101,7 @@ class SizeableTest extends TestCase
         foreach ($image['index'] as $sizeName => $path) {
             $this->assertFileExists(public_path($path));
             $this->assertEquals(
-                $expectedPath . DIRECTORY_SEPARATOR . "{$random}_{$sizeName}.png",
+                $expectedPath.DIRECTORY_SEPARATOR."{$random}_{$sizeName}.png",
                 $path
             );
         }
@@ -118,17 +118,17 @@ class SizeableTest extends TestCase
             ->alsoResize(100, 50)
             ->save();
 
-        $expectedPath = 'post' . DIRECTORY_SEPARATOR . $random;
+        $expectedPath = 'post'.DIRECTORY_SEPARATOR.$random;
         $this->assertEquals($expectedPath, $image['imageDirectory']);
         $this->assertTrue(array_key_exists(0, $image['index']));
         $this->assertTrue(array_key_exists('large', $image['index']));
-        $this->assertEquals($expectedPath . DIRECTORY_SEPARATOR . $random . '_0.png', $image['index'][0]);
-        $this->assertEquals($expectedPath . DIRECTORY_SEPARATOR . $random . '_large.png', $image['index']['large']);
+        $this->assertEquals($expectedPath.DIRECTORY_SEPARATOR.$random.'_0.png', $image['index'][0]);
+        $this->assertEquals($expectedPath.DIRECTORY_SEPARATOR.$random.'_large.png', $image['index']['large']);
 
         foreach ($image['index'] as $sizeName => $path) {
             $this->assertFileExists(public_path($path));
             $this->assertEquals(
-                $expectedPath . DIRECTORY_SEPARATOR . "{$random}_{$sizeName}.png",
+                $expectedPath.DIRECTORY_SEPARATOR."{$random}_{$sizeName}.png",
                 $path
             );
         }
@@ -172,7 +172,7 @@ class SizeableTest extends TestCase
             ->resize(10, 10, 'large')
             ->save();
 
-        $this->assertStringContainsString($image['index'], 'post' . DIRECTORY_SEPARATOR . 'name_large.png');
+        $this->assertStringContainsString($image['index'], 'post'.DIRECTORY_SEPARATOR.'name_large.png');
         $this->assertFileExists(public_path($image['index']));
 
         $image = Image::raw($this->image)
@@ -200,7 +200,7 @@ class SizeableTest extends TestCase
             ->resize(10, 10, 'large')
             ->save();
 
-        $this->assertStringContainsString($image['index'], 'post' . DIRECTORY_SEPARATOR . 'name_large.png');
+        $this->assertStringContainsString($image['index'], 'post'.DIRECTORY_SEPARATOR.'name_large.png');
         $this->assertFileExists(public_path($image['index']));
     }
 
@@ -252,7 +252,7 @@ class SizeableTest extends TestCase
                 ],
             ])
             ->save();
-            
+
         $this->assertTrue(is_array($image['index']));
         foreach ($image['index'] as $key => $path) {
             $this->assertStringContainsString("_$key.png", $image['index'][$key]);
@@ -436,7 +436,7 @@ class SizeableTest extends TestCase
             ->save();
 
         foreach ($images['index'] as $image) {
-            $this->assertFileExists(storage_path('app/' . $image));
+            $this->assertFileExists(storage_path('app/'.$image));
         }
 
         $images = Image::make($this->image)
@@ -458,7 +458,7 @@ class SizeableTest extends TestCase
             });
 
         foreach ($images as $image) {
-            $this->assertFileExists(storage_path('app/' . $image));
+            $this->assertFileExists(storage_path('app/'.$image));
         }
 
         config(['image.disks.storage-public' => storage_path('public')]);
@@ -472,7 +472,7 @@ class SizeableTest extends TestCase
             });
 
         foreach ($images as $image) {
-            $this->assertFileExists(storage_path('public/' . $image));
+            $this->assertFileExists(storage_path('public/'.$image));
         }
 
         $image = Image::raw($this->image)
@@ -491,7 +491,7 @@ class SizeableTest extends TestCase
                 return $image->imagePath;
             });
 
-        $this->assertFileExists(storage_path('app/' . $image));
+        $this->assertFileExists(storage_path('app/'.$image));
 
         $image = Image::raw($this->image)
             ->disk('storage-public')
@@ -501,6 +501,6 @@ class SizeableTest extends TestCase
                 return $image->imagePath;
             });
 
-        $this->assertFileExists(storage_path('public/' . $image));
+        $this->assertFileExists(storage_path('public/'.$image));
     }
 }
