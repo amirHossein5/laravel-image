@@ -4,9 +4,6 @@ namespace AmirHossein5\LaravelImage\Tests\Feature;
 
 use AmirHossein5\LaravelImage\Facades\Image;
 use AmirHossein5\LaravelImage\Tests\TestCase;
-use Illuminate\Filesystem\Filesystem;
-use LogicException;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Intervention\Image\Facades\Image as Intervention;
 
 class BaseTest extends TestCase
@@ -21,7 +18,7 @@ class BaseTest extends TestCase
             ->save();
 
         $this->assertStringContainsString(
-            '1' . DIRECTORY_SEPARATOR . '2' . DIRECTORY_SEPARATOR . '3' . DIRECTORY_SEPARATOR,
+            '1'.DIRECTORY_SEPARATOR.'2'.DIRECTORY_SEPARATOR.'3'.DIRECTORY_SEPARATOR,
             $image['imageDirectory']
         );
     }
@@ -82,7 +79,7 @@ class BaseTest extends TestCase
         foreach ($image['index'] as $img) {
             $this->assertFileExists(public_path($img));
         }
-        foreach (config('image.' . config('image.use_size')) as $sizeName => $size) {
+        foreach (config('image.'.config('image.use_size')) as $sizeName => $size) {
             $this->assertArrayHasKey($sizeName, $image['index']);
         }
 
@@ -103,9 +100,9 @@ class BaseTest extends TestCase
         $this->assertEquals(3, count($image));
         $this->assertTrue(!is_array($image['index']));
         $this->assertArrayNotHasKey('default_size', $image);
-        $this->assertDirectoryExists(storage_path('app/' . $image['imageDirectory']));
+        $this->assertDirectoryExists(storage_path('app/'.$image['imageDirectory']));
         $this->assertEquals('storage', $image['disk']);
-        $this->assertFileExists(storage_path('app/' . $image['index']));
+        $this->assertFileExists(storage_path('app/'.$image['index']));
 
         $image = Image::raw($this->image)->resize(50, 30)->save();
 
@@ -123,7 +120,7 @@ class BaseTest extends TestCase
         $this->assertArrayNotHasKey('default_size', $image);
         $this->assertDirectoryExists(public_path($image['imageDirectory']));
         $this->assertEquals('public', $image['disk']);
-        foreach (config('image.' . config('image.use_size')) as $sizeName => $size) {
+        foreach (config('image.'.config('image.use_size')) as $sizeName => $size) {
             $this->assertArrayHasKey($sizeName, $image['index']);
         }
         foreach ($image['index'] as $img) {
@@ -162,12 +159,12 @@ class BaseTest extends TestCase
 
         $this->assertEquals(
             $this->directorySeparator(
-                config('image.root_directory') . '/' . 'post' . '/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $this->random(false)
+                config('image.root_directory').'/'.'post'.'/'.date('Y').'/'.date('m').'/'.date('d').'/'.$this->random(false)
             ),
             $image['imageDirectory']
         );
 
-        foreach (config('image.' . config('image.use_size')) as $sizeName => $size) {
+        foreach (config('image.'.config('image.use_size')) as $sizeName => $size) {
             $this->assertArrayHasKey($sizeName, $image['index']);
         }
     }
@@ -232,19 +229,19 @@ class BaseTest extends TestCase
             ->quality(0)
             ->save(false, function ($image) {
                 return [
-                    'image' => $image->image,
-                    'sizes' => $image->sizes,
-                    'defaultSize' => $image->defaultSize,
-                    'imagePath' => $image->imagePath,
-                    'imageDirectory' => $image->imageDirectory,
-                    'imageName' => $image->imageName,
-                    'imageFormat' => $image->imageFormat,
-                    'disk' => $image->disk,
-                    'rootDirectory' => $image->rootDirectory,
+                    'image'              => $image->image,
+                    'sizes'              => $image->sizes,
+                    'defaultSize'        => $image->defaultSize,
+                    'imagePath'          => $image->imagePath,
+                    'imageDirectory'     => $image->imageDirectory,
+                    'imageName'          => $image->imageName,
+                    'imageFormat'        => $image->imageFormat,
+                    'disk'               => $image->disk,
+                    'rootDirectory'      => $image->rootDirectory,
                     'exclusiveDirectory' => $image->exclusiveDirectory,
                     'archiveDirectories' => $image->archiveDirectories,
-                    'sizesDirectory' => $image->sizesDirectory,
-                    'quality' => $image->quality,
+                    'sizesDirectory'     => $image->sizesDirectory,
+                    'quality'            => $image->quality,
                 ];
             });
 
@@ -253,19 +250,19 @@ class BaseTest extends TestCase
         $image = Image::raw($this->image)
             ->save(false, function ($image) {
                 return [
-                    'image' => $image->image,
-                    'sizes' => $image->sizes,
-                    'defaultSize' => $image->defaultSize,
-                    'imagePath' => $image->imagePath,
-                    'imageDirectory' => $image->imageDirectory,
-                    'imageName' => $image->imageName,
-                    'imageFormat' => $image->imageFormat,
-                    'disk' => $image->disk,
-                    'rootDirectory' => $image->rootDirectory,
+                    'image'              => $image->image,
+                    'sizes'              => $image->sizes,
+                    'defaultSize'        => $image->defaultSize,
+                    'imagePath'          => $image->imagePath,
+                    'imageDirectory'     => $image->imageDirectory,
+                    'imageName'          => $image->imageName,
+                    'imageFormat'        => $image->imageFormat,
+                    'disk'               => $image->disk,
+                    'rootDirectory'      => $image->rootDirectory,
                     'exclusiveDirectory' => $image->exclusiveDirectory,
                     'archiveDirectories' => $image->archiveDirectories,
-                    'sizesDirectory' => $image->sizesDirectory,
-                    'quality' => $image->quality,
+                    'sizesDirectory'     => $image->sizesDirectory,
+                    'quality'            => $image->quality,
                 ];
             });
 
@@ -275,19 +272,19 @@ class BaseTest extends TestCase
             ->quality(20)
             ->save(false, function ($image) {
                 return [
-                    'image' => $image->image,
-                    'sizes' => $image->sizes,
-                    'defaultSize' => $image->defaultSize,
-                    'imagePath' => $image->imagePath,
-                    'imageDirectory' => $image->imageDirectory,
-                    'imageName' => $image->imageName,
-                    'imageFormat' => $image->imageFormat,
-                    'disk' => $image->disk,
-                    'rootDirectory' => $image->rootDirectory,
+                    'image'              => $image->image,
+                    'sizes'              => $image->sizes,
+                    'defaultSize'        => $image->defaultSize,
+                    'imagePath'          => $image->imagePath,
+                    'imageDirectory'     => $image->imageDirectory,
+                    'imageName'          => $image->imageName,
+                    'imageFormat'        => $image->imageFormat,
+                    'disk'               => $image->disk,
+                    'rootDirectory'      => $image->rootDirectory,
                     'exclusiveDirectory' => $image->exclusiveDirectory,
                     'archiveDirectories' => $image->archiveDirectories,
-                    'sizesDirectory' => $image->sizesDirectory,
-                    'quality' => $image->quality,
+                    'sizesDirectory'     => $image->sizesDirectory,
+                    'quality'            => $image->quality,
                 ];
             });
 
@@ -300,19 +297,19 @@ class BaseTest extends TestCase
             ->in('post/')
             ->save(false, function ($image) {
                 return [
-                    'image' => $image->image,
-                    'sizes' => $image->sizes,
-                    'defaultSize' => $image->defaultSize,
-                    'imagePath' => $image->imagePath,
-                    'imageDirectory' => $image->imageDirectory,
-                    'imageName' => $image->imageName,
-                    'imageFormat' => $image->imageFormat,
-                    'disk' => $image->disk,
-                    'rootDirectory' => $image->rootDirectory,
+                    'image'              => $image->image,
+                    'sizes'              => $image->sizes,
+                    'defaultSize'        => $image->defaultSize,
+                    'imagePath'          => $image->imagePath,
+                    'imageDirectory'     => $image->imageDirectory,
+                    'imageName'          => $image->imageName,
+                    'imageFormat'        => $image->imageFormat,
+                    'disk'               => $image->disk,
+                    'rootDirectory'      => $image->rootDirectory,
                     'exclusiveDirectory' => $image->exclusiveDirectory,
                     'archiveDirectories' => $image->archiveDirectories,
-                    'sizesDirectory' => $image->sizesDirectory,
-                    'quality' => $image->quality,
+                    'sizesDirectory'     => $image->sizesDirectory,
+                    'quality'            => $image->quality,
                 ];
             });
 
@@ -321,12 +318,12 @@ class BaseTest extends TestCase
 
     /**
      * Tests the output of manually given image.
-     * 
+     *
      * @param array $image
      * @param array $sizes
-     * @param bool $isRaw
-     * @param int $quality
-     *  
+     * @param bool  $isRaw
+     * @param int   $quality
+     *
      * @return void
      */
     private function propertiesAreValid(array $image, array $sizes = [], bool $isRaw = false, int $quality = 90, int $random): void
@@ -335,10 +332,10 @@ class BaseTest extends TestCase
         if ($sizes) {
             foreach ($sizes as $sizeName => $dimensions) {
                 $this->assertArrayHasKey($sizeName, $image['sizes']);
-            };
+            }
         } else {
             $this->assertNull($image['sizes']);
-        } 
+        }
         $this->assertNull($image['defaultSize']);
         if (is_array($image['imagePath'])) {
             foreach ($image['imagePath'] as $path) {
@@ -352,7 +349,7 @@ class BaseTest extends TestCase
         if ($sizes) {
             $fileName = pathinfo(public_path($image['imagePath']['small']), PATHINFO_FILENAME);
             $extension = pathinfo(public_path($image['imagePath']['small']), PATHINFO_EXTENSION);
-            $this->assertEquals($fileName, $image['imageName'] . '_small');
+            $this->assertEquals($fileName, $image['imageName'].'_small');
         } else {
             $fileName = pathinfo(public_path($image['imagePath']), PATHINFO_FILENAME);
             $extension = pathinfo(public_path($image['imagePath']), PATHINFO_EXTENSION);
@@ -364,10 +361,10 @@ class BaseTest extends TestCase
             $this->assertEquals(config('image.root_directory'), $image['rootDirectory']);
             $this->assertEquals('post', $image['exclusiveDirectory']);
             $this->assertEquals(
-                $this->directorySeparator(date('Y') . '/' . date('m') . '/' . date('d')),
+                $this->directorySeparator(date('Y').'/'.date('m').'/'.date('d')),
                 $image['archiveDirectories']
             );
-        } 
+        }
         $this->assertEquals($random, $image['sizesDirectory']);
         $this->assertEquals($quality, $image['quality']);
     }

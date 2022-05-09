@@ -28,10 +28,12 @@ trait Sizeable
         if ($pathKeys != 'index') {
             if (array_key_exists($sizeName, $image[$pathKeys])) {
                 $image['default_size'] = $sizeName;
+
                 return $image;
             }
         } else {
             $image['default_size'] = $sizeName;
+
             return $image;
         }
 
