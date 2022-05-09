@@ -315,6 +315,7 @@ Properties:
 | $image->imageName          | Image name.                                               |
 | $image->imageFormat        | Image format.                                             |
 | $image->disk               | [Disk](#save-in-storage)                                  |
+| $image->quality               | [Image Quality](#image-quality)                                  |
 | $image->rootDirectory      | [see Directory customazations](#directory-customazations) |
 | $image->exclusiveDirectory | [see Directory customazations](#directory-customazations) |
 | $image->archiveDirectories | [see Directory customazations](#directory-customazations) |
@@ -405,7 +406,6 @@ Image::disk('storage')->rm($image);
 
 
 
-
 ## Replacing image(s)
 
 ```replace``` method works same as ```save``` method, but if there be image(s) with same name as this image, this will be replace.
@@ -420,6 +420,15 @@ $image = Image::raw($this->image)
 ```
 
 It works for multipe images too.
+
+
+## Image Quality
+
+It is normalized for all file types to a range from 0 (poor quality, small file) to 100 (best quality, big file). Quality is only applied if you're encoding JPG format since PNG compression is lossless and does not affect image quality. The default value is 90.
+
+```php
+  ->quality(90)
+```
 
 ## Transactions
 
