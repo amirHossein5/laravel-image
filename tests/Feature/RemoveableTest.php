@@ -30,54 +30,54 @@ class RemoveableTest extends TestCase
         $random = $this->random();
 
         $image = Image::raw($this->image)
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->save();
 
-        $this->assertFileExists(public_path($random . '.png'));
+        $this->assertFileExists(public_path($random.'.png'));
 
         Image::rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFalse(file_exists(public_path($random . '.png')));
+        $this->assertFalse(file_exists(public_path($random.'.png')));
 
         $random = $this->random();
 
         $image = Image::raw($this->image)
             ->in('test')
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->save();
 
-        $this->assertFileExists(public_path('test/' . $random . '.png'));
+        $this->assertFileExists(public_path('test/'.$random.'.png'));
 
         Image::disk('public')->rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFileDoesNotExist(public_path('test/' . $random . '.png'));
+        $this->assertFileDoesNotExist(public_path('test/'.$random.'.png'));
 
         $random = $this->random();
 
         $image = Image::raw($this->image)
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->disk('storage')
             ->save();
 
-        $this->assertFileExists(storage_path('app/' . $random . '.png'));
+        $this->assertFileExists(storage_path('app/'.$random.'.png'));
 
         Image::disk('storage')->rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFileDoesNotExist(storage_path('app/test/' . $random . '.png'));
+        $this->assertFileDoesNotExist(storage_path('app/test/'.$random.'.png'));
 
         $random = $this->random();
 
         $image = Image::raw($this->image)
             ->in('test')
             ->disk('storage')
-            ->be($random . '.png')
+            ->be($random.'.png')
             ->save();
 
-        $this->assertFileExists(storage_path('app/test/' . $random . '.png'));
+        $this->assertFileExists(storage_path('app/test/'.$random.'.png'));
 
         Image::disk('storage')->rm($image);
         $this->assertTrue(Image::wasRecentlyRemoved());
-        $this->assertFileDoesNotExist(storage_path('app/test/' . $random . '.png'));
+        $this->assertFileDoesNotExist(storage_path('app/test/'.$random.'.png'));
 
         $images = Image::make($this->image)
             ->setExclusiveDirectory('post')
@@ -95,7 +95,6 @@ class RemoveableTest extends TestCase
             $this->assertFileDoesNotExist(public_path($image));
         }
         $this->assertTrue(Image::wasRecentlyRemoved());
-
 
         $image = Image::raw($this->image)
             ->disk('public')
