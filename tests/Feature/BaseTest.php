@@ -224,8 +224,10 @@ class BaseTest extends TestCase
 
     public function test_manually_way_properties()
     {
+        
         $image = Image::make($this->image)
             ->setExclusiveDirectory('post')
+            ->quality(0)
             ->save(false, function ($image) {
                 return [
                     'image' => $image->image,
@@ -244,7 +246,7 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, config('image.imageSizes'));
+        $this->propertiesAreValid($image, config('image.imageSizes'), false, 0, $this->random(false));
 
         $image = Image::raw($this->image)
             ->save(false, function ($image) {
@@ -265,10 +267,10 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, [], true);
+        $this->propertiesAreValid($image, [], true, 90, $this->random(false));;
 
         $image = Image::raw($this->image)
-            ->quality(80)
+            ->quality(20)
             ->save(false, function ($image) {
                 return [
                     'image' => $image->image,
@@ -287,10 +289,11 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, [], true, 80);
+        $this->propertiesAreValid($image, [], true, 20, $this->random(false));;
 
         $image = Image::raw($this->image)
             ->resizeBy(config('image.imageSizes'))
+            ->quality(0)
             ->in('post/')
             ->save(false, function ($image) {
                 return [
@@ -310,7 +313,7 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, config('image.imageSizes'), true);
+        $this->propertiesAreValid($image, config('image.imageSizes'), true, 0, $this->random(false));
     }
 
     /**
@@ -323,7 +326,7 @@ class BaseTest extends TestCase
      *  
      * @return void
      */
-    private function propertiesAreValid(array $image, array $sizes = [], bool $isRaw = false, int $quality = 90): void
+    private function propertiesAreValid(array $image, array $sizes = [], bool $isRaw = false, int $quality = 90, int $random): void
     {
         $this->assertEquals(get_class($image['image']), \Intervention\Image\Image::class);
         if ($sizes) {
@@ -362,7 +365,7 @@ class BaseTest extends TestCase
                 $image['archiveDirectories']
             );
         } 
-        $this->assertEquals($this->random(false), $image['sizesDirectory']);
+        $this->assertEquals($random, $image['sizesDirectory']);
         $this->assertEquals($quality, $image['quality']);
     }
 }
