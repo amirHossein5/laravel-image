@@ -414,7 +414,6 @@ Image::disk('storage')->rm($image);
 use AmirHossein5\LaravelImage\Facades\Image;
 
 $image = Image::raw($this->image)
-    ->in('')
     ->be('logo.png')
     ->replace(); 
 ```
@@ -438,7 +437,7 @@ If an exception is thrown within the transaction closure, the transaction will a
 use AmirHossein5\LaravelImage\Facades\Image;
 
 Image::transaction(function () {
-  Image::raw($image)->in('')->save();
+  Image::raw($image)->save();
 });
 ```
 
@@ -449,7 +448,7 @@ The ```transaction``` method accepts an optional second argument which defines t
 use AmirHossein5\LaravelImage\Facades\Image;
 
 Image::transaction(function () {
-  Image::raw($image)->in('')->save();
+  Image::raw($image)->save();
 }, maxAttempts: 4);
 ```
 
@@ -537,7 +536,6 @@ use AmirHossein5\LaravelImage\Facades\Image;
 
 $request['icon'] = Image::raw($request['icon'])
     ->be('icon.png')
-    ->in('')
     ->replace(false, function ($image) {
         return $image->imagePath;
     });
