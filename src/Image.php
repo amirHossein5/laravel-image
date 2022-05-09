@@ -132,11 +132,13 @@ class Image
      *
      * @param int $quality
      * 
-     * @return void
+     * @return self
      */
-    public function quality(int $quality): void
+    public function quality(int $quality): self
     {
         $this->quality = $quality;
+
+        return $this;
     }
 
     /**
@@ -236,20 +238,20 @@ class Image
     private function store(InterventionImage $image, ?array $sizes, $imagePath, bool $upsize, int $quality): void
     {
         if (!$sizes) {
-            $image->save($this->disk_path($imagePath));
+            $image->save($this->disk_path($imagePath), $quality);
         } elseif (count($sizes) === 1) {
             foreach ($sizes as $key => $size) {
                 $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
                     !$upsize ?: $constraint->upsize();
                 });
-                $image->save($this->disk_path($imagePath));
+                $image->save($this->disk_path($imagePath), $quality);
             }
         } elseif (count($sizes) > 1) {
             foreach ($sizes as $key => $size) {
                 $image->fit($size['width'], $size['height'], function ($constraint) use ($upsize) {
                     !$upsize ?: $constraint->upsize();
                 });
-                $image->save($this->disk_path($imagePath[$key]));
+                $image->save($this->disk_path($imagePath[$key]), $quality);
             }
         }
     }

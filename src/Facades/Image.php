@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static bool wasRecentlyRemoved()
  * @method static self disk(string $disk)
- * @method static self raw(Illuminate\Http\UploadedFile $image)
- * @method static self make(Illuminate\Http\UploadedFile $image)
+ * @method static self raw(\Illuminate\Http\UploadedFile|\Intervention\Image\Image $image)
+ * @method static self make(\Illuminate\Http\UploadedFile|\Intervention\Image\Image $image)
  * @method static void fake()
  * @method static mixed save(bool $upsize = false, ?\Closure $closure = null)
  * @method static mixed replace(bool $upsize = false, ?\Closure $closure = null)
@@ -29,7 +29,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static void transaction(\Closure $callback, int $maxAttempts = 1)
  * @method static void rollBack()
  * @method static void commit()
- * @method static void beginTransaction();
+ * @method static void beginTransaction()
+ * @method static self quality(int $quality)
  * 
  **/
 class Image extends Facade

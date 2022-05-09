@@ -268,6 +268,28 @@ class BaseTest extends TestCase
         $this->propertiesAreValid($image, [], true);
 
         $image = Image::raw($this->image)
+            ->quality(80)
+            ->save(false, function ($image) {
+                return [
+                    'image' => $image->image,
+                    'sizes' => $image->sizes,
+                    'defaultSize' => $image->defaultSize,
+                    'imagePath' => $image->imagePath,
+                    'imageDirectory' => $image->imageDirectory,
+                    'imageName' => $image->imageName,
+                    'imageFormat' => $image->imageFormat,
+                    'disk' => $image->disk,
+                    'rootDirectory' => $image->rootDirectory,
+                    'exclusiveDirectory' => $image->exclusiveDirectory,
+                    'archiveDirectories' => $image->archiveDirectories,
+                    'sizesDirectory' => $image->sizesDirectory,
+                    'quality' => $image->quality,
+                ];
+            });
+
+        $this->propertiesAreValid($image, [], true, 80);
+
+        $image = Image::raw($this->image)
             ->resizeBy(config('image.imageSizes'))
             ->in('post/')
             ->save(false, function ($image) {
