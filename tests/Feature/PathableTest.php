@@ -41,17 +41,16 @@ class PathableTest extends TestCase
             ->setRootDirectory('root')
             ->setExclusiveDirectory('post')
             ->setArchiveDirectories('archive')
-            ->setSizesDirectory('size')
             ->setImageName('name')
             ->setImageFormat('png')
             ->save();
 
         $this->assertEquals(
-            $this->directorySeparator('root/post/archive/size/name_large.png'),
+            $this->directorySeparator("root/post/archive/{$this->random(false)}/name_large.png"),
             $image['index']['large']
         );
         $this->assertEquals(
-            $this->directorySeparator('root/post/archive/size'),
+            $this->directorySeparator("root/post/archive/{$this->random(false)}"),
             $image['imageDirectory']
         );
         foreach ($image['index'] as $img) {

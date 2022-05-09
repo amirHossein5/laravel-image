@@ -224,9 +224,11 @@ class BaseTest extends TestCase
 
     public function test_manually_way_properties()
     {
-        
+        $random = $this->random(false);
+
         $image = Image::make($this->image)
             ->setExclusiveDirectory('post')
+            ->setSizesDirectory($random)
             ->quality(0)
             ->save(false, function ($image) {
                 return [
@@ -246,7 +248,7 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, config('image.imageSizes'), false, 0, $this->random(false));
+        $this->propertiesAreValid($image, config('image.imageSizes'), false, 0, $random);
 
         $image = Image::raw($this->image)
             ->save(false, function ($image) {
@@ -267,7 +269,7 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, [], true, 90, $this->random(false));;
+        $this->propertiesAreValid($image, [], true, 90, $random);
 
         $image = Image::raw($this->image)
             ->quality(20)
@@ -289,10 +291,11 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, [], true, 20, $this->random(false));;
+        $this->propertiesAreValid($image, [], true, 20, $random);
 
         $image = Image::raw($this->image)
             ->resizeBy(config('image.imageSizes'))
+            ->setSizesDirectory($random)
             ->quality(0)
             ->in('post/')
             ->save(false, function ($image) {
@@ -313,7 +316,7 @@ class BaseTest extends TestCase
                 ];
             });
 
-        $this->propertiesAreValid($image, config('image.imageSizes'), true, 0, $this->random(false));
+        $this->propertiesAreValid($image, config('image.imageSizes'), true, 0, $random);
     }
 
     /**
