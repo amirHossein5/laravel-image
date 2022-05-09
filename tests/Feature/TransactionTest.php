@@ -4,10 +4,7 @@ namespace AmirHossein5\LaravelImage\Tests\Feature;
 
 use AmirHossein5\LaravelImage\Facades\Image;
 use AmirHossein5\LaravelImage\Tests\TestCase;
-use Illuminate\Filesystem\Filesystem;
 use LogicException;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Intervention\Image\Facades\Image as Intervention;
 
 class TransactionTest extends TestCase
 {
@@ -27,7 +24,6 @@ class TransactionTest extends TestCase
 
         try {
             Image::transaction(function () use (&$image1, &$image2) {
-
                 $image1 = Image::make($this->image)
                     ->setExclusiveDirectory('post')
                     ->disk('storage')
@@ -35,7 +31,7 @@ class TransactionTest extends TestCase
                     ->save(false, function ($image) {
                         return [
                             'index'          => $image->imagePath,
-                            'directory' => $image->imageDirectory
+                            'directory'      => $image->imageDirectory,
                         ];
                     });
 
@@ -49,11 +45,10 @@ class TransactionTest extends TestCase
                 Image::raw($this->image)->disk()->save();
             });
         } catch (\Throwable $e) {
-
-            $this->assertDirectoryDoesNotExist(storage_path('app/' . $image1['directory']));
+            $this->assertDirectoryDoesNotExist(storage_path('app/'.$image1['directory']));
 
             foreach ($image1['index'] as $image) {
-                $this->assertFileDoesNotExist(storage_path('app/' . $image));
+                $this->assertFileDoesNotExist(storage_path('app/'.$image));
             }
 
             // $this->assertFileDoesNotExist(public_path($image2));
@@ -76,7 +71,7 @@ class TransactionTest extends TestCase
             ->save(false, function ($image) {
                 return [
                     'index'          => $image->imagePath,
-                    'directory' => $image->imageDirectory
+                    'directory'      => $image->imageDirectory,
                 ];
             });
 
@@ -94,10 +89,10 @@ class TransactionTest extends TestCase
             Image::rollBack();
         }
 
-        $this->assertDirectoryDoesNotExist(storage_path('app/' . $image1['directory']));
+        $this->assertDirectoryDoesNotExist(storage_path('app/'.$image1['directory']));
 
         foreach ($image1['index'] as $image) {
-            $this->assertFileDoesNotExist(storage_path('app/' . $image));
+            $this->assertFileDoesNotExist(storage_path('app/'.$image));
         }
 
         $this->assertFileDoesNotExist(public_path($image2));
@@ -113,13 +108,12 @@ class TransactionTest extends TestCase
             ->save();
 
         Image::transaction(function () use (&$image1, &$image2) {
-
             $image1 = Image::make($this->image)
                 ->setExclusiveDirectory('post')
                 ->disk('storage')
                 ->save(false, function ($image) {
                     return [
-                        'index'          => $image->imagePath
+                        'index'          => $image->imagePath,
                     ];
                 });
 
@@ -132,7 +126,7 @@ class TransactionTest extends TestCase
         });
 
         foreach ($image1['index'] as $image) {
-            $this->assertFileExists(storage_path('app/' . $image));
+            $this->assertFileExists(storage_path('app/'.$image));
         }
 
         $this->assertFileExists(public_path($image2));
@@ -152,7 +146,7 @@ class TransactionTest extends TestCase
             ->disk('storage')
             ->save(false, function ($image) {
                 return [
-                    'index'          => $image->imagePath
+                    'index'          => $image->imagePath,
                 ];
             });
 
@@ -166,7 +160,7 @@ class TransactionTest extends TestCase
         Image::commit();
 
         foreach ($image1['index'] as $image) {
-            $this->assertFileExists(storage_path('app/' . $image));
+            $this->assertFileExists(storage_path('app/'.$image));
         }
 
         $this->assertFileExists(public_path($image2));
@@ -187,8 +181,6 @@ class TransactionTest extends TestCase
         Image::rollBack();
 
         $this->assertFileExists(public_path($image));
-
-
 
         Image::beginTransaction();
 
