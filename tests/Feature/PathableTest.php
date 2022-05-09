@@ -4,11 +4,6 @@ namespace AmirHossein5\LaravelImage\Tests\Feature;
 
 use AmirHossein5\LaravelImage\Facades\Image;
 use AmirHossein5\LaravelImage\Tests\TestCase;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Storage;
-use LogicException;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Intervention\Image\Facades\Image as Intervention;
 
 class PathableTest extends TestCase
 {
@@ -88,7 +83,7 @@ class PathableTest extends TestCase
             $image['imageDirectory']
         );
         foreach ($image['index'] as $img) {
-            $this->assertFileExists(storage_path('app/' . $img));
+            $this->assertFileExists(storage_path('app/'.$img));
         }
     }
 }
