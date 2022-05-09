@@ -251,6 +251,7 @@ class BaseTest extends TestCase
         $this->propertiesAreValid($image, config('image.imageSizes'), false, 0, $random);
 
         $image = Image::raw($this->image)
+            ->setSizesDirectory($random)
             ->save(false, function ($image) {
                 return [
                     'image' => $image->image,
@@ -273,6 +274,7 @@ class BaseTest extends TestCase
 
         $image = Image::raw($this->image)
             ->quality(20)
+            ->setSizesDirectory($random)
             ->save(false, function ($image) {
                 return [
                     'image' => $image->image,
