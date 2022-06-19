@@ -67,8 +67,11 @@ trait Removeable
                 if ($i === 0) {
                     $this->wasRecentlyRemoved = unlink($this->disk_path($paths[$i]));
                 } else {
-                    $this->wasRecentlyRemoved =
-                        unlink($this->disk_path($paths[$i])) and $this->wasRecentlyRemoved;
+                    if (unlink($this->disk_path($paths[$i])) and $this->wasRecentlyRemoved) {
+                        $this->wasRecentlyRemoved = true;
+                    } else {
+                        $this->wasRecentlyRemoved = false;
+                    }
                 }
             }
         } catch (\Exception $th) {

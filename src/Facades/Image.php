@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void beginTransaction()
  * @method static self quality(int $quality)
  *
+ * @see \AmirHossein5\LaravelImage\Image
  **/
 class Image extends Facade
 {
